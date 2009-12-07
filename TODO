@@ -1,0 +1,4 @@
+o Use Linux::Inotify2 on linux
+o Monitor multiple dirs
+o Monitor individual files
+o Filter/exclued files in a dir
