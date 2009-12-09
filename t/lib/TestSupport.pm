@@ -3,7 +3,7 @@ package TestSupport;
 use File::Temp qw(tempdir);
 use File::Path;
 use File::Basename;
-use autodie qw(:all);
+use autodie;
 
 use Exporter qw(import);
 our @EXPORT_OK = qw(create_test_files delete_test_files $dir);

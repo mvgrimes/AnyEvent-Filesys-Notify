@@ -3,6 +3,7 @@ package AnyEvent::Filesys::Notify::Role::Linux;
 use Moose::Role;
 use AnyEvent;
 use Linux::Inotify2;
+use Carp;
 
 sub _init {
     my $self = shift;

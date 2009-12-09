@@ -14,7 +14,7 @@ has dir       => ( is => 'ro', required => 1 );
 has cb        => ( is => 'rw', required => 1 );
 has interval  => ( is => 'ro', default  => 2 );
 has pure_perl => ( is => 'ro', default  => 0 );    ## TODO: -> defualt/no_ext
-has _fs     => ( is => 'rw', isa => 'Mac::FSEvents|Linux::INotify2' );
+has _fs     => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
 
