@@ -1,37 +1,47 @@
 package AnyEvent::Filesys::Notify;
 
+# ABSTRACT: AnyEvent based Filesys::Notify
+
 use Moose;
 use AnyEvent;
-use Mac::FSEvents;
 use File::Find::Rule;
 use Cwd qw/abs_path/;
 use AnyEvent::Filesys::Notify::Event;
+use Carp;
+use Try::Tiny;
 
-has dir => ( is => 'ro', required => 1 );
-has cb  => ( is => 'rw', required => 1 );
-has _fs => ( is => 'rw', );
-has _old_fs => ( is => 'rw' );
-has _w      => ( is => 'rw', );
+has dir       => ( is => 'ro', required => 1 );
+has cb        => ( is => 'rw', required => 1 );
+has interval  => ( is => 'ro', default  => 2 );
+has pure_perl => ( is => 'ro', default  => 0 );    ## TODO: -> defualt/no_ext
+has _fs     => ( is => 'rw', isa => 'Mac::FSEvents|Linux::INotify2' );
+has _old_fs => ( is => 'rw', isa => 'HashRef' );
+has _watcher => ( is => 'rw', );
 
 sub BUILD {
     my $self = shift;
 
     $self->_old_fs( _scan_fs( $self->dir ) );
 
-    $self->_fs(
-        Mac::FSEvents->new( {
-                path    => $self->dir,
-                latency => 2.0,
-            } ) );
+    if ( $self->pure_perl ) {
+        with 'AnyEvent::Filesys::Notify::Role::Default';
+    } elsif ( $^O eq 'linux' ) {
+        try { with 'AnyEvent::Filesys::Notify::Role::Linux' }
+        catch {
+            croak
+              "Unable to load the Linux plugin. You probably need to install Linux::INotify2 or specify 'use_default' (but that is very inefficient):\n$_";
+        }
+    } elsif ( $^O eq 'darwin' ) {
+        try { with 'AnyEvent::Filesys::Notify::Role::Mac' }
+        catch {
+            croak
+              "Unable to load the Mac plugin. You probably need to install Mac::FSEvents or specify 'use_default' (but that is very inefficient):\n$_";
+        }
+    } else {
+        with 'AnyEvent::Filesys::Notify::Role::Default';
+    }
 
-    $self->_w(
-        AnyEvent->io(
-            fh   => $self->_fs->watch,
-            poll => 'r',
-            cb   => sub {
-                $self->_process_events( $self->_fs->read_events() );
-            } ) );
-
+    $self->_init;
 }
 
 sub _process_events {
@@ -44,8 +54,7 @@ sub _process_events {
     my @events = _diff_fs( $self->_old_fs, $new_fs );
 
     $self->_old_fs($new_fs);
-
-    $self->cb->(@events);
+    $self->cb->(@events) if @events;
 }
 
 # Return a hash ref representing all the files and stats in @path.
@@ -116,3 +125,22 @@ sub _stat {
 }
 
 1;
+
+__END__
+
+=head1 SYNOPSIS
+
+    use <Module::Name>;
+    # Brief but working code example(s) here showing the most common usage(s)
+
+    # This section will be as far as many users bother reading
+    # so make it as educational and exemplary as possible.
+
+
+=head1 DESCRIPTION
+
+A full description of the module and its features.
+May include numerous subsections (i.e. =head2, =head3, etc.)
+
+=cut
+
