@@ -1,0 +1,13 @@
+^_build
+^Build$
+^blib
+~$
+\.swp$
+\.bak$
+\.git/
+^MANIFEST\.SKIP$
+.releaserc
+^MYMETA.yml$
+.gitignore
+.build
+dist.ini

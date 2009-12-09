@@ -16,13 +16,15 @@ sub _init {
         &IN_MODIFY | &IN_CREATE | &IN_DELETE | &IN_DELETE_SELF | &IN_MOVE_SELF,
         sub { my $e = shift; $self->_process_events($e); } );
 
-    $self->_fs($inotify);
+    $self->_fs_monitor($inotify);
+
     $self->_watcher(
         AnyEvent->io(
             fh   => $inotify->fileno,
             poll => 'r',
             cb   => sub { $inotify->poll } ) );
 
+    return 1;
 }
 
 1;

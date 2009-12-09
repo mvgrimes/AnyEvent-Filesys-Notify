@@ -3,7 +3,6 @@ use Test::More tests => 6;
 use strict;
 use warnings;
 use lib 't/lib';
-use Data::Dump;
 $|++;
 
 use TestSupport qw(create_test_files delete_test_files $dir);
@@ -15,16 +14,17 @@ my $cv;
 my @expected = ();
 
 my $n = AnyEvent::Filesys::Notify->new(
-    dir => $dir,
-    cb  => sub {
+    dir      => $dir,
+    interval => 0.5,
+    cb       => sub {
         is_deeply( [ map { $_->type } @_ ], \@expected, '... got events' );
         $cv->send;
     },
-    pure_perl => 1,
+    no_external => 1,
 );
 isa_ok( $n, 'AnyEvent::Filesys::Notify' );
-ok( $n->does('AnyEvent::Filesys::Notify::Role::Default'),
-    '... with the default role' );
+ok( $n->does('AnyEvent::Filesys::Notify::Role::Fallback'),
+    '... with the fallback role' );
 diag "This might take a 5 seconds or so....";
 
 @expected = qw(created created created);

@@ -1,4 +1,4 @@
-package AnyEvent::Filesys::Notify::Role::Default;
+package AnyEvent::Filesys::Notify::Role::Fallback;
 
 use Moose::Role;
 use AnyEvent;
@@ -15,6 +15,7 @@ sub _init {
                 $self->_process_events();
             } ) ) or croak "Error creating timer: $@";
 
+    return 1;
 }
 
 1;

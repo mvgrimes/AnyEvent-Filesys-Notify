@@ -3,7 +3,6 @@ use Test::More tests => 5;
 use strict;
 use warnings;
 use lib 't/lib';
-use Data::Dump;
 $|++;
 
 use TestSupport qw(create_test_files delete_test_files $dir);
@@ -15,8 +14,9 @@ my $cv;
 my @expected = ();
 
 my $n = AnyEvent::Filesys::Notify->new(
-    dir => $dir,
-    cb  => sub {
+    dir      => $dir,
+    interval => 0.5,
+    cb       => sub {
         is_deeply( [ map { $_->type } @_ ], \@expected, '... got events' );
         $cv->send;
     },

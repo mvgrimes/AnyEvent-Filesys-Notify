@@ -1,9 +1,9 @@
 use Test::More;
 
+use Data::Dump;
 use strict;
 use warnings;
 use lib 't/lib';
-use Data::Dump;
 
 use TestSupport qw(create_test_files delete_test_files $dir);
 
