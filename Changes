@@ -1,5 +1,8 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.02 - Thu Dec 10 11:53:37 2009
+	Initial release on CPAN
+
 0.01 - 
 	Initial import
 
