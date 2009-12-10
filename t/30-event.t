@@ -1,4 +1,4 @@
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 use strict;
 use warnings;
@@ -16,11 +16,14 @@ create_test_files(qw(two/1));
 my $cv;
 my @expected = ();
 
+use Data::Dump;
+
 my $n = AnyEvent::Filesys::Notify->new(
     dirs => [
         File::Spec->catfile( $dir, 'one' ), File::Spec->catfile( $dir, 'two' )
     ],
     interval => 0.5,
+    filter   => sub { shift !~ qr/ignoreme/ },
     cb       => sub {
         is_deeply( [ map { $_->type } @_ ], \@expected, '... got events' );
         $cv->send;
@@ -41,6 +44,18 @@ $cv->recv;
 
 @expected = qw(deleted);
 delete_test_files(qw(two/sub/2));
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+@expected = qw(created);
+create_test_files(qw(one/ignoreme one/3));
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+$n->filter( qr/onlyme/ );
+
+@expected = qw(created);
+create_test_files(qw(one/onlyme one/4));
 $cv = AnyEvent->condvar;
 $cv->recv;
 

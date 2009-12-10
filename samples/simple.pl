@@ -10,6 +10,7 @@ use AnyEvent::Impl::Perl;  # Could be use Event or use EV, see AnyEvent
 my $notifier = AnyEvent::Filesys::Notify->new(
     dirs     => [qw(lib t)],
     interval => 0.5,
+    filter   => sub { shift !~ /\.(swp|tmp)$/ },
     cb       => sub {
         my @events = @_;
 

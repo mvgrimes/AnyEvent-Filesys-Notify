@@ -1,7 +1,5 @@
 package AnyEvent::Filesys::Notify;
 
-# ABSTRACT: stuff
-
 use Moose;
 use AnyEvent;
 use File::Find::Rule;
@@ -16,6 +14,7 @@ has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
 has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
 has interval    => ( is => 'ro', isa => 'Num',           default  => 2 );
 has no_external => ( is => 'ro', isa => 'Bool',          default  => 0 );
+has filter      => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
 has _fs_monitor => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
@@ -53,7 +52,7 @@ sub _process_events {
     # doesn't provide much information, so rescan ourselves
 
     my $new_fs = _scan_fs( $self->dirs );
-    my @events = _diff_fs( $self->_old_fs, $new_fs );
+    my @events = $self->_apply_filter( _diff_fs( $self->_old_fs, $new_fs ) );
 
     $self->_old_fs($new_fs);
     $self->cb->(@events) if @events;
@@ -61,11 +60,28 @@ sub _process_events {
     return \@events;
 }
 
+sub _apply_filter {
+    my ( $self, @events ) = @_;
+
+    if ( ref $self->filter eq 'CODE' ) {
+        my $cb = $self->filter;
+        @events = grep { $cb->( $_->path ) } @events;
+    } elsif ( ref $self->filter eq 'Regexp' ) {
+        my $re = $self->filter;
+        @events = grep { $_->path =~ $re } @events;
+    }
+
+    return @events;
+}
+
 # Return a hash ref representing all the files and stats in @path.
 # Keys are absolute path and values are path/mtime/size/is_dir
 # Takes either array or arrayref
 sub _scan_fs {
-    my @paths = ref $_[0] eq 'ARRAY' ? @{$_[0]} : @_;
+    my (@args) = @_;
+
+    # Accept either an array of dirs or a array ref of dirs
+    my @paths = ref $args[0] eq 'ARRAY' ? @{ $args[0] } : @args;
 
     # Separated into two lines to avoid stat on files multiple times.
     my %files = map { $_ => 1 } File::Find::Rule->in(@paths);
@@ -142,7 +158,8 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
     my $notifier = AnyEvent::Filesys::Notify->new(
         dir      => [ qw( this_dir that_dir ) ],
-        interval => 2.0,    # Optional depending on underlying watcher
+        interval => 2.0,             # Optional depending on underlying watcher
+        filter   => sub { shift !~ /\.(swp|tmp)$/ },
         cb       => sub {
             my (@events) = @_;
             # ... process @events ...
@@ -177,9 +194,13 @@ Arguments for new are:
 
 =item dirs 
 
+    dirs => [ '/var/log', '/etc' ],
+
 An ArrayRef of directories to watch. Required.
 
 =item interval
+
+    interval => 1.5,   # seconds
 
 Specifies the time in fractional seconds between file system checks for
 the L<AnyEvent::Filesys::Notify::Role::Fallback> implementation.
@@ -189,13 +210,27 @@ C<AnyEvent::Filesys::Notify::Role::Mac> implementation.
 
 Ignored for the C<AnyEvent::Filesys::Notify::Role::Linux> implementation.
 
+=item filter
+
+    filter => qr/\.(ya?ml|co?nf|jso?n)$/,
+    filter => sub { shift !~ /\.(swp|tmp)$/,
+
+A CodeRef or Regexp which is used to filter wanted/unwanted events. If this
+is a Regexp, we attempt to match the absolute path name and filter out any
+that do not match. If a CodeRef, the absolute path name is passed as the
+only argument and the event is fired only if there sub returns a true value.
+
 =item cb
+
+    cb  => sub { my @events = @_; ... },
 
 A CodeRef that is called when a modification to the monitored directory(ies) is
 detected. The callback is passed a list of
 L<AnyEvent::Filesys::Notify::Event>s. Required.
 
 =item no_external
+
+    no_external => 1,
 
 Force the use of the L</Fallback> watcher implementation. This is not
 encouraged as the L</Fallback> implement is very inefficient, but it 
