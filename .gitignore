@@ -12,3 +12,4 @@ MANIFEST
 AnyEvent-Filesys-Notify-*
 MANIFEST.bak
 README
+exp/
