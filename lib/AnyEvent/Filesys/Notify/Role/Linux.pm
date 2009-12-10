@@ -1,6 +1,7 @@
 package AnyEvent::Filesys::Notify::Role::Linux;
 
 use Moose::Role;
+use namespace::autoclean;
 use AnyEvent;
 use Linux::Inotify2;
 use Carp;

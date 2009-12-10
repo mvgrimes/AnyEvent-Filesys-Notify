@@ -1,6 +1,7 @@
 package AnyEvent::Filesys::Notify;
 
 use Moose;
+use namespace::autoclean;
 use AnyEvent;
 use File::Find::Rule;
 use Cwd qw/abs_path/;
@@ -24,6 +25,11 @@ sub BUILD {
 
     $self->_old_fs( _scan_fs( $self->dirs ) );
 
+    # Figure out which backend to use:
+    # This should be done at compile time not object build, but I need 
+    # something like an import flag to indicate that we should use 
+    # the Fallback role. Not sure how to cleanly do that with Moose.
+    # Probably need to use traits? But documentation 
     if ( $self->no_external ) {
         with 'AnyEvent::Filesys::Notify::Role::Fallback';
     } elsif ( $^O eq 'linux' ) {
