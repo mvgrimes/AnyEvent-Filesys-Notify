@@ -8,20 +8,24 @@ use Carp;
 sub _init {
     my $self = shift;
 
-    $self->_fs_monitor(
-        Mac::FSEvents->new( {
-                path    => $self->dir,
-                latency => $self->interval,
-            } ) );
+    ## TODO: don't add sub-dirs of a watched dir
+    my @fs_monitors =
+      map { Mac::FSEvents->new( { path => $_, latency => $self->interval, } ) }
+      @{ $self->dirs };
+    $self->_fs_monitor( \@fs_monitors );
 
-    $self->_watcher(
+    my @watchers =
+      map {
+        my $fs_monitor = $_;  # needed to scope $fs_monitor
         AnyEvent->io(
-            fh   => $self->_fs_monitor->watch,
+            fh   => $fs_monitor->watch,
             poll => 'r',
             cb   => sub {
-                $self->_process_events( $self->_fs_monitor->read_events() );
-            } ) );
+                $self->_process_events( $fs_monitor->read_events() );
+            } )
+      } @fs_monitors;
 
+    $self->_watcher( \@watchers );
     return 1;
 }
 

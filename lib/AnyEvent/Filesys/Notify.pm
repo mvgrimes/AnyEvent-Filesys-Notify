@@ -12,11 +12,10 @@ use Try::Tiny;
 
 our $VERSION = '0.02';
 
-has dir         => ( is => 'ro', isa => 'Str',      required => 1 );
-# has dirs        => ( is => 'ro', isa => 'ArrayRef', required => 1 );
-has cb          => ( is => 'rw', isa => 'CodeRef',  required => 1 );
-has interval    => ( is => 'ro', isa => 'Num',      default  => 2 );
-has no_external => ( is => 'ro', isa => 'Bool',     default  => 0 );
+has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
+has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
+has interval    => ( is => 'ro', isa => 'Num',           default  => 2 );
+has no_external => ( is => 'ro', isa => 'Bool',          default  => 0 );
 has _fs_monitor => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
@@ -24,7 +23,7 @@ has _watcher => ( is => 'rw', );
 sub BUILD {
     my $self = shift;
 
-    $self->_old_fs( _scan_fs( $self->dir ) );
+    $self->_old_fs( _scan_fs( $self->dirs ) );
 
     if ( $self->no_external ) {
         with 'AnyEvent::Filesys::Notify::Role::Fallback';
@@ -51,9 +50,9 @@ sub _process_events {
     my ( $self, @raw_events ) = @_;
 
     # We are just ingoring the raw events for now... Mac::FSEvents
-    # doesn't provide much information, so rescan our selves
+    # doesn't provide much information, so rescan ourselves
 
-    my $new_fs = _scan_fs( $self->dir );
+    my $new_fs = _scan_fs( $self->dirs );
     my @events = _diff_fs( $self->_old_fs, $new_fs );
 
     $self->_old_fs($new_fs);
@@ -63,8 +62,10 @@ sub _process_events {
 }
 
 # Return a hash ref representing all the files and stats in @path.
+# Keys are absolute path and values are path/mtime/size/is_dir
+# Takes either array or arrayref
 sub _scan_fs {
-    my (@paths) = @_;
+    my @paths = ref $_[0] eq 'ARRAY' ? @{$_[0]} : @_;
 
     # Separated into two lines to avoid stat on files multiple times.
     my %files = map { $_ => 1 } File::Find::Rule->in(@paths);

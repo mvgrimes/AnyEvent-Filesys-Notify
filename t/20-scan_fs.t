@@ -16,7 +16,7 @@ my $old_fs = AnyEvent::Filesys::Notify::_scan_fs( $dir, "$dir/one" );
 is( keys %$old_fs, 6, '_scan_fs: got all of them' );
 
 create_test_files(qw(2 one/2 two/2));
-my $new_fs = AnyEvent::Filesys::Notify::_scan_fs($dir);
+my $new_fs = AnyEvent::Filesys::Notify::_scan_fs( [ $dir ] );
 is( keys %$new_fs, 9, '_scan_fs: got all of them' );
 
 my @events = AnyEvent::Filesys::Notify::_diff_fs( $old_fs, $new_fs );

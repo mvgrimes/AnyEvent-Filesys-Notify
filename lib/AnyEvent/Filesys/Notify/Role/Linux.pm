@@ -11,10 +11,13 @@ sub _init {
     my $inotify = Linux::Inotify2->new()
       or croak "Unable to create new Linux::Inotify2 object";
 
-    $inotify->watch(
-        $self->dir,
-        &IN_MODIFY | &IN_CREATE | &IN_DELETE | &IN_DELETE_SELF | &IN_MOVE_SELF,
-        sub { my $e = shift; $self->_process_events($e); } );
+    for my $dir ( @{ $self->dirs } ) {
+        $inotify->watch(
+            $dir,
+            &IN_MODIFY | &IN_CREATE | &IN_DELETE | &IN_DELETE_SELF |
+              &IN_MOVE_SELF,
+            sub { my $e = shift; $self->_process_events($e); } );
+    }
 
     $self->_fs_monitor($inotify);
 
