@@ -4,6 +4,7 @@ use Moose;
 
 has path => ( is => 'ro', isa => 'Str', required => 1 );
 has type => ( is => 'ro', isa => 'Str', required => 1 );
+has is_dir => ( is => 'ro', isa => 'Str', default => 0 );
 
 sub is_created {
     return shift->type eq 'created';
@@ -49,15 +50,21 @@ Simple object to encapsulate information about the filesystem modifications.
     
     my $modified_file = $event->path();
 
-Returns the path to the modified file. 
-XXXX: This is the path as given by the user, ie not modified by abs_path
+Returns the path to the modified file.  This is the path as given by the user,
+ie not modified by abs_path.
 
 =head2 type()
 
-    my $modificaiton_type $event->type();
+    my $modificaiton_type = $event->type();
 
 Returns the type of change made to the file or directory. Will be one of
 C<created>, C<modified>, or C<deleted>.
+
+=head2 is_dir()
+
+    my $is_dir  = $event->is_dir();
+
+Returns a true value is the path is a directory.
 
 =head2 is_created()
     

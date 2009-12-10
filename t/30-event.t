@@ -1,4 +1,4 @@
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 use strict;
 use warnings;
@@ -30,6 +30,17 @@ my $n = AnyEvent::Filesys::Notify->new(
     },
 );
 isa_ok( $n, 'AnyEvent::Filesys::Notify' );
+
+SKIP: {
+    skip "not sure which os we are on", 1 unless $^O =~ /linux|darwin/;
+    ok( $n->does('AnyEvent::Filesys::Notify::Role::Linux'),
+        '... with the linux role' )
+      if $^O eq 'linux';
+    ok( $n->does('AnyEvent::Filesys::Notify::Role::Mac'),
+        '... with the linux role' )
+      if $^O eq 'darwin';
+}
+
 diag "This might take a 5 seconds or so....";
 
 @expected = qw(created created created);
@@ -52,7 +63,7 @@ create_test_files(qw(one/ignoreme one/3));
 $cv = AnyEvent->condvar;
 $cv->recv;
 
-$n->filter( qr/onlyme/ );
+$n->filter(qr/onlyme/);
 
 @expected = qw(created);
 create_test_files(qw(one/onlyme one/4));

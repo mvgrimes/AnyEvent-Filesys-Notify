@@ -30,7 +30,7 @@ sub BUILD {
         try { with 'AnyEvent::Filesys::Notify::Role::Linux' }
         catch {
             croak
-              "Unable to load the Linux plugin. You may want to Linux::INotify2 or specify 'no_external' (but that is very inefficient):\n$_";
+              "Unable to load the Linux plugin. You may want to install Linux::INotify2 or specify 'no_external' (but that is very inefficient):\n$_";
         }
     } elsif ( $^O eq 'darwin' ) {
         try { with 'AnyEvent::Filesys::Notify::Role::Mac' }
@@ -98,14 +98,16 @@ sub _diff_fs {
         if ( not exists $new_fs->{$path} ) {
             push @events,
               AnyEvent::Filesys::Notify::Event->new(
-                path => $path,
-                type => 'deleted'
+                path   => $path,
+                type   => 'deleted',
+                is_dir => $old_fs->{$path}->{is_dir},
               );
         } elsif ( _is_path_modified( $old_fs->{$path}, $new_fs->{$path} ) ) {
             push @events,
               AnyEvent::Filesys::Notify::Event->new(
-                path => $path,
-                type => 'modified'
+                path   => $path,
+                type   => 'modified',
+                is_dir => $old_fs->{$path}->{is_dir},
               );
         }
     }
@@ -114,8 +116,9 @@ sub _diff_fs {
         if ( not exists $old_fs->{$path} ) {
             push @events,
               AnyEvent::Filesys::Notify::Event->new(
-                path => $path,
-                type => 'created'
+                path   => $path,
+                type   => 'created',
+                is_dir => $new_fs->{$path}->{is_dir},
               );
         }
     }
