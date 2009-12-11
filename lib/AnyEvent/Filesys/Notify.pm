@@ -151,16 +151,18 @@ sub _load_backend {
             apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Linux' );
         }
         catch {
-            croak
-              "Unable to load the Linux plugin. You may want to install Linux::INotify2 or specify 'no_external' (but that is very inefficient):\n$_";
+            croak "Unable to load the Linux plugin. You may want to install "
+              . "Linux::INotify2 or specify 'no_external' (but that is very "
+              . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'darwin' ) {
         try {
             apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Mac' );
         }
         catch {
-            croak
-              "Unable to load the Mac plugin. You may want to install Mac::FSEvents or specify 'no_external' (but that is very inefficient):\n$_";
+            croak "Unable to load the Mac plugin. You may want to install "
+              . "Mac::FSEvents or specify 'no_external' (but that is very "
+              . "inefficient):\n$_";
         }
     } else {
         apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Fallback' );
