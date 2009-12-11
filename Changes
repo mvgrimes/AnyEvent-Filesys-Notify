@@ -1,6 +1,6 @@
-Changes for AnyEvent::Filesys::Notify
+Revision history for {{$dist->name}}
 
-0.03 - Fri Dec 11 08:55:30 2009
+{{$NEXT}}
 	Added namespace::autoclean and switched to apply_all_roles. This gives us
 	true per-instance application of backends (Inotify/FSEvents/Fallback).
 

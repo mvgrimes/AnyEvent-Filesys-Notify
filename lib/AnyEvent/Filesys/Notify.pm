@@ -1,5 +1,7 @@
 package AnyEvent::Filesys::Notify;
 
+# ABSTRACT: An AnyEvent compatible module to monitor files/directories for changes
+
 use Moose;
 use Moose::Util qw(apply_all_roles);
 use namespace::autoclean;
@@ -10,8 +12,6 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.03';
-
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
 has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
 has interval    => ( is => 'ro', isa => 'Num',           default  => 2 );
@@ -20,6 +20,65 @@ has filter      => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
 has _fs_monitor => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
+
+=method new()
+
+A constructor for a new AnyEvent watcher that will monitor the files in the
+given directories and execute a callback when a modification is detected. 
+No action is take until a event loop is entered.
+
+Arguments for new are:
+
+=over 4
+
+=item dirs 
+
+    dirs => [ '/var/log', '/etc' ],
+
+An ArrayRef of directories to watch. Required.
+
+=item interval
+
+    interval => 1.5,   # seconds
+
+Specifies the time in fractional seconds between file system checks for
+the L<AnyEvent::Filesys::Notify::Role::Fallback> implementation.
+
+Specifies the latency for L<Mac::FSEvents> for the
+C<AnyEvent::Filesys::Notify::Role::Mac> implementation.
+
+Ignored for the C<AnyEvent::Filesys::Notify::Role::Linux> implementation.
+
+=item filter
+
+    filter => qr/\.(ya?ml|co?nf|jso?n)$/,
+    filter => sub { shift !~ /\.(swp|tmp)$/,
+
+A CodeRef or Regexp which is used to filter wanted/unwanted events. If this
+is a Regexp, we attempt to match the absolute path name and filter out any
+that do not match. If a CodeRef, the absolute path name is passed as the
+only argument and the event is fired only if there sub returns a true value.
+
+=item cb
+
+    cb  => sub { my @events = @_; ... },
+
+A CodeRef that is called when a modification to the monitored directory(ies) is
+detected. The callback is passed a list of
+L<AnyEvent::Filesys::Notify::Event>s. Required.
+
+=item no_external
+
+    no_external => 1,
+
+Force the use of the L</Fallback> watcher implementation. This is not
+encouraged as the L</Fallback> implement is very inefficient, but it 
+does not require either L<Linux::INotify2> nor L<Mac::FSEvents>. Optional.
+
+=back
+
+=cut 
+
 
 sub BUILD {
     my $self = shift;
@@ -175,10 +234,6 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
-=head1 NAME
-
-AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/directories for changes
-
 =head1 SYNOPSIS
 
     use AnyEvent::Filesys::Notify;
@@ -207,85 +262,6 @@ See L</IMPLEMENTATIONS> for more on the backends.
 Events are passed to the callback (specified as a CodeRef to C<cb> in the
 constructor) in the form of L<AnyEvent::Filesys::Notify::Event>s.
 
-=head1 METHODS
-
-=head2 new()
-
-A constructor for a new AnyEvent watcher that will monitor the files in the
-given directories and execute a callback when a modification is detected. 
-No action is take until a event loop is entered.
-
-Arguments for new are:
-
-=over 4
-
-=item dirs 
-
-    dirs => [ '/var/log', '/etc' ],
-
-An ArrayRef of directories to watch. Required.
-
-=item interval
-
-    interval => 1.5,   # seconds
-
-Specifies the time in fractional seconds between file system checks for
-the L<AnyEvent::Filesys::Notify::Role::Fallback> implementation.
-
-Specifies the latency for L<Mac::FSEvents> for the
-C<AnyEvent::Filesys::Notify::Role::Mac> implementation.
-
-Ignored for the C<AnyEvent::Filesys::Notify::Role::Linux> implementation.
-
-=item filter
-
-    filter => qr/\.(ya?ml|co?nf|jso?n)$/,
-    filter => sub { shift !~ /\.(swp|tmp)$/,
-
-A CodeRef or Regexp which is used to filter wanted/unwanted events. If this
-is a Regexp, we attempt to match the absolute path name and filter out any
-that do not match. If a CodeRef, the absolute path name is passed as the
-only argument and the event is fired only if there sub returns a true value.
-
-=item cb
-
-    cb  => sub { my @events = @_; ... },
-
-A CodeRef that is called when a modification to the monitored directory(ies) is
-detected. The callback is passed a list of
-L<AnyEvent::Filesys::Notify::Event>s. Required.
-
-=item no_external
-
-    no_external => 1,
-
-Force the use of the L</Fallback> watcher implementation. This is not
-encouraged as the L</Fallback> implement is very inefficient, but it 
-does not require either L<Linux::INotify2> nor L<Mac::FSEvents>. Optional.
-
-=back
-
-=head1 WATCHER IMPLEMENTATIONS
-
-=head2 Linux
-
-Uses L<Linux::INotify2> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
-watcher to monitor the C<$inotify-E<gt>fileno> filehandle.
-
-=head2 Mac
-
-Uses L<Mac::FSEvents> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
-watcher to monitor the C<$fsevent-E<gt>watch> filehandle.
-
-=head2 Fallback
-
-A simple scan of the watched directories at regular intervals. Sets up an
-C<AnyEvent-E<gt>timer> watcher which is executed every C<interval> seconds
-(or fractions thereof). C<interval> can be specified in the constructor to
-L<AnyEvent::Filesys::Notify> and defaults to 2.0 seconds.
-
-This is a very inefficient implementation. Use one of the others if possible.
-
 =head1 Why Another Module For File System Notifications
 
 At the time of writing there were several very nice modules that accomplish
@@ -311,7 +287,26 @@ are perfect for many situations. If one of their modules will work for you
 by all means use it, but if you are already using an event loop, this
 module may fit the bill.
 
+=head1 WATCHER IMPLEMENTATIONS
 
+=head2 Linux
+
+Uses L<Linux::INotify2> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
+watcher to monitor the C<$inotify-E<gt>fileno> filehandle.
+
+=head2 Mac
+
+Uses L<Mac::FSEvents> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
+watcher to monitor the C<$fsevent-E<gt>watch> filehandle.
+
+=head2 Fallback
+
+A simple scan of the watched directories at regular intervals. Sets up an
+C<AnyEvent-E<gt>timer> watcher which is executed every C<interval> seconds
+(or fractions thereof). C<interval> can be specified in the constructor to
+L<AnyEvent::Filesys::Notify> and defaults to 2.0 seconds.
+
+This is a very inefficient implementation. Use one of the others if possible.
 =head1 SEE ALSO
 
 Modules used to implement this module L<AnyEvent>, L<Mac::FSEvents>,
@@ -322,17 +317,5 @@ Alternatives to this module L<Filesys::Notify::Simple>, L<File::ChangeNotify>.
 =head1 BUGS
 
 Please report any bugs or suggestions at L<http://rt.cpan.org/>
-
-=head1 AUTHOR
-
-Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
-
-=head1 COPYRIGHT AND LICENSE
-
-Copyright (C) 2009 by Mark Grimes
-
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
 
 =cut
