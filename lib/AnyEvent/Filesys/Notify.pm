@@ -1,6 +1,7 @@
 package AnyEvent::Filesys::Notify;
 
 use Moose;
+use Moose::Util qw(apply_all_roles);
 use namespace::autoclean;
 use AnyEvent;
 use File::Find::Rule;
@@ -9,7 +10,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
 has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
@@ -25,30 +26,8 @@ sub BUILD {
 
     $self->_old_fs( _scan_fs( $self->dirs ) );
 
-    # Figure out which backend to use:
-    # This should be done at compile time not object build, but I need 
-    # something like an import flag to indicate that we should use 
-    # the Fallback role. Not sure how to cleanly do that with Moose.
-    # Probably need to use traits? But documentation 
-    if ( $self->no_external ) {
-        with 'AnyEvent::Filesys::Notify::Role::Fallback';
-    } elsif ( $^O eq 'linux' ) {
-        try { with 'AnyEvent::Filesys::Notify::Role::Linux' }
-        catch {
-            croak
-              "Unable to load the Linux plugin. You may want to install Linux::INotify2 or specify 'no_external' (but that is very inefficient):\n$_";
-        }
-    } elsif ( $^O eq 'darwin' ) {
-        try { with 'AnyEvent::Filesys::Notify::Role::Mac' }
-        catch {
-            croak
-              "Unable to load the Mac plugin. You may want to install Mac::FSEvents or specify 'no_external' (but that is very inefficient):\n$_";
-        }
-    } else {
-        with 'AnyEvent::Filesys::Notify::Role::Fallback';
-    }
-
-    return $self->_init;
+    $self->_load_backend;
+    return $self->_init;    # initialize the backend
 }
 
 sub _process_events {
@@ -154,6 +133,43 @@ sub _stat {
     };
 
 }
+
+# Figure out which backend to use:
+# I would prefer this to be done at compile time not object build, but I also
+# want the user to be able to force the Fallback role. Something like an
+# import flag would be great, but Moose creates an import sub for us and
+# I'm not sure how to cleanly do it. Maybe need to use traits, but the
+# documentation suggests traits are for application of roles by object.
+# This will work for now.
+sub _load_backend {
+    my $self = shift;
+
+    if ( $self->no_external ) {
+        apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Fallback' );
+    } elsif ( $^O eq 'linux' ) {
+        try {
+            apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Linux' );
+        }
+        catch {
+            croak
+              "Unable to load the Linux plugin. You may want to install Linux::INotify2 or specify 'no_external' (but that is very inefficient):\n$_";
+        }
+    } elsif ( $^O eq 'darwin' ) {
+        try {
+            apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Mac' );
+        }
+        catch {
+            croak
+              "Unable to load the Mac plugin. You may want to install Mac::FSEvents or specify 'no_external' (but that is very inefficient):\n$_";
+        }
+    } else {
+        apply_all_roles( $self, 'AnyEvent::Filesys::Notify::Role::Fallback' );
+    }
+
+    return 1;
+}
+
+__PACKAGE__->meta->make_immutable;
 
 1;
 
