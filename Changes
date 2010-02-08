@@ -1,5 +1,8 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.05 - Mon Feb  8 18:47:45 2010
+	Fixed bug in AFN::Event, where is_dir was incorrectly typed.
+
 0.04 - Fri Jan 29 16:13:39 2010
 	Updated documentation to reflect ability to watch multiple 
 	directories. Other minor cleanup.
