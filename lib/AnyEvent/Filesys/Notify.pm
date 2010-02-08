@@ -10,7 +10,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
 has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );

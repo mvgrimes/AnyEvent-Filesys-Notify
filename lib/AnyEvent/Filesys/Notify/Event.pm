@@ -4,7 +4,7 @@ use Moose;
 
 has path => ( is => 'ro', isa => 'Str', required => 1 );
 has type => ( is => 'ro', isa => 'Str', required => 1 );
-has is_dir => ( is => 'ro', isa => 'Str', default => 0 );
+has is_dir => ( is => 'ro', isa => 'Bool', default => 0 );
 
 sub is_created {
     return shift->type eq 'created';
@@ -64,7 +64,7 @@ C<created>, C<modified>, or C<deleted>.
 
     my $is_dir  = $event->is_dir();
 
-Returns a true value is the path is a directory.
+Returns a true value if the path is a directory.
 
 =head2 is_created()
     
