@@ -37,7 +37,7 @@ SKIP: {
         '... with the linux role' )
       if $^O eq 'linux';
     ok( $n->does('AnyEvent::Filesys::Notify::Role::Mac'),
-        '... with the linux role' )
+        '... with the mac role' )
       if $^O eq 'darwin';
 }
 
