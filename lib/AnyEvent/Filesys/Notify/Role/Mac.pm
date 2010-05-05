@@ -5,6 +5,7 @@ use namespace::autoclean;
 use AnyEvent;
 use Mac::FSEvents;
 use Carp;
+use Scalar::Util qw(weaken);
 
 sub _init {
     my $self = shift;
@@ -18,6 +19,8 @@ sub _init {
 
     # Create an AnyEvent->io watcher for each fs_monitor
     # Done in a block so we can scope and preserve the $fs_monitor
+    my $weak_self = $self;
+    weaken $weak_self;
     my @watchers =
       map {                     ## no critic (ProhibitComplexMappings)
         my $fs_monitor = $_;    # needed to scope $fs_monitor
@@ -25,7 +28,7 @@ sub _init {
             fh   => $fs_monitor->watch,
             poll => 'r',
             cb   => sub {
-                $self->_process_events( $fs_monitor->read_events() );
+                $weak_self->_process_events( $fs_monitor->read_events() );
             } )
       } @fs_monitors;
 

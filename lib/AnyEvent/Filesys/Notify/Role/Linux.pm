@@ -5,9 +5,12 @@ use namespace::autoclean;
 use AnyEvent;
 use Linux::Inotify2;
 use Carp;
+use Scalar::Util qw(weaken);
 
 sub _init {
     my $self = shift;
+    my $weak_self = $self;
+    weaken $weak_self;
 
     my $inotify = Linux::Inotify2->new()
       or croak "Unable to create new Linux::Inotify2 object";
@@ -21,7 +24,7 @@ sub _init {
             $dir,
             &IN_MODIFY | &IN_CREATE | &IN_DELETE | &IN_DELETE_SELF |
               &IN_MOVE_SELF,
-            sub { my $e = shift; $self->_process_events($e); } );
+            sub { my $e = shift; $weak_self->_process_events($e); } );
     }
 
     $self->_fs_monitor($inotify);
@@ -41,6 +44,8 @@ sub _init {
 # This is done after filtering. So entire dirs can be ignored efficiently;
 around '_process_events' => sub {
     my ( $orig, $self, @e ) = @_;
+    my $weak_self = $self;
+    weaken $weak_self;
 
     my $events = $self->$orig(@e);
 
@@ -51,7 +56,7 @@ around '_process_events' => sub {
             $event->path,
             &IN_MODIFY | &IN_CREATE | &IN_DELETE | &IN_DELETE_SELF |
               &IN_MOVE_SELF,
-            sub { my $e = shift; $self->_process_events($e); } );
+            sub { my $e = shift; $weak_self->_process_events($e); } );
 
     }
 
