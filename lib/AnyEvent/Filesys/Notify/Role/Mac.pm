@@ -1,5 +1,7 @@
 package AnyEvent::Filesys::Notify::Role::Mac;
 
+# ABSTRACT: Use Mac::FSEvents to watch for changed files
+
 use Moose::Role;
 use namespace::autoclean;
 use AnyEvent;

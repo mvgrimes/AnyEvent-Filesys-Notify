@@ -1,5 +1,7 @@
 package AnyEvent::Filesys::Notify::Role::Fallback;
 
+# ABSTRACT: Fallback method of file watching (check in regular intervals)
+
 use Moose::Role;
 use namespace::autoclean;
 use AnyEvent;

@@ -1,5 +1,7 @@
 package AnyEvent::Filesys::Notify;
 
+# ABSTRACT: An AnyEvent compatible module to monitor files/directories for changes
+
 use Moose;
 use Moose::Util qw(apply_all_roles);
 use namespace::autoclean;
