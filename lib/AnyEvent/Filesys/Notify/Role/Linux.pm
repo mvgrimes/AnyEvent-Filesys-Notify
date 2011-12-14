@@ -8,6 +8,8 @@ use AnyEvent;
 use Linux::Inotify2;
 use Carp;
 
+# use Scalar::Util qw(weaken);  # Attempt to address RT#57104, but alas...
+
 sub _init {
     my $self = shift;
 
@@ -18,6 +20,9 @@ sub _init {
     # modifications to files too.
     my $old_fs = $self->_old_fs;
     my @dirs = grep { $old_fs->{$_}->{is_dir} } keys %$old_fs;
+
+    # weaken $self; # Attempt to address RT#57104, but alas...
+
     for my $dir (@dirs) {
         $inotify->watch(
             $dir,

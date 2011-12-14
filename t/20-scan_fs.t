@@ -6,7 +6,6 @@ use warnings;
 use lib 't/lib';
 
 use TestSupport qw(create_test_files delete_test_files $dir);
-
 use AnyEvent::Filesys::Notify;
 
 # Setup for tests
