@@ -20,9 +20,18 @@ sub is_deleted {
 
 1;
 
+
+__END__
+
+=pod
+
 =head1 NAME
 
 AnyEvent::Filesys::Notify::Event - Object to report changes in the monitored filesystem
+
+=head1 VERSION
+
+version 0.06
 
 =head1 SYNOPSIS
 
@@ -49,7 +58,7 @@ Simple object to encapsulate information about the filesystem modifications.
 =head1 METHODS
 
 =head2 path()
-    
+
     my $modified_file = $event->path();
 
 Returns the path to the modified file.  This is the path as given by the user,
@@ -69,7 +78,7 @@ C<created>, C<modified>, or C<deleted>.
 Returns a true value if the path is a directory.
 
 =head2 is_created()
-    
+
     do_something($event) if $event->is_created;
 
 True if C<$event-E<gt>type eq 'created'>.
@@ -100,10 +109,9 @@ Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009 by Mark Grimes
+This software is copyright (c) 2010 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut

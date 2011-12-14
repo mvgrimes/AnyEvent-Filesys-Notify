@@ -12,7 +12,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
 has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
@@ -177,9 +177,18 @@ __PACKAGE__->meta->make_immutable;
 
 1;
 
+
+__END__
+
+=pod
+
 =head1 NAME
 
 AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/directories for changes
+
+=head1 VERSION
+
+version 0.06
 
 =head1 SYNOPSIS
 
@@ -313,7 +322,6 @@ are perfect for many situations. If one of their modules will work for you
 by all means use it, but if you are already using an event loop, this
 module may fit the bill.
 
-
 =head1 SEE ALSO
 
 Modules used to implement this module L<AnyEvent>, L<Mac::FSEvents>,
@@ -331,10 +339,9 @@ Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-Copyright (C) 2009 by Mark Grimes
+This software is copyright (c) 2010 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
-This library is free software; you can redistribute it and/or modify
-it under the same terms as Perl itself, either Perl version 5.8.2 or,
-at your option, any later version of Perl 5 you may have available.
+This is free software; you can redistribute it and/or modify it under
+the same terms as the Perl 5 programming language system itself.
 
 =cut
