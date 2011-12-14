@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.06 - Wed Dec 14 17:24:52 EST 2011
+    Implemented a fix for RT#72849 (excessive warnings if there are broken
+    symlinks on ext4)
+
 0.05 - Mon Feb  8 18:47:45 2010
 	Fixed bug in AFN::Event, where is_dir was incorrectly typed.
 
