@@ -68,11 +68,15 @@ sub _scan_fs {
     # Accept either an array of dirs or a array ref of dirs
     my @paths = ref $args[0] eq 'ARRAY' ? @{ $args[0] } : @args;
 
-    # Separated into two lines to avoid stat on files multiple times.
-    my %files = map { $_ => 1 } File::Find::Rule->in(@paths);
-    %files = map { abs_path($_) => _stat($_) } keys %files;
+    my $fs_stats = {};
 
-    return \%files;
+    for my $file ( File::Find::Rule->in(@paths) ) {
+        my $stat = _stat($file)
+          or next; # Skip files that we can't stat (ie, broken symlinks on ext4)
+        $fs_stats->{ abs_path($file) } = $stat;
+    }
+
+    return $fs_stats;
 }
 
 sub _diff_fs {
@@ -120,11 +124,16 @@ sub _is_path_modified {
     return;
 }
 
-# Taken from Filesys::Notify::Simple --Thanks Miyagawa
+# Originally taken from Filesys::Notify::Simple --Thanks Miyagawa
 sub _stat {
     my $path = shift;
 
     my @stat = stat $path;
+
+    # Return undefined if no stats can be retrieved, as it happens with broken
+    # symlinks (at least under ext4).
+    return undef unless @stat;
+
     return {
         path   => $path,
         mtime  => $stat[9],
