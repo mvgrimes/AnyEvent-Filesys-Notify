@@ -3,6 +3,7 @@
 
 META.yml
 MYMETA.yml
+MYMETA.json
 blib/
 Build
 _build/

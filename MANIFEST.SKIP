@@ -11,4 +11,6 @@
 .gitignore
 .build
 dist.ini
+weaver.ini
 exp/
+^MYMETA\.json$
