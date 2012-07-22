@@ -2,6 +2,7 @@
 .build
 
 META.yml
+META.json
 MYMETA.yml
 MYMETA.json
 blib/
@@ -14,4 +15,5 @@ AnyEvent-Filesys-Notify-*
 MANIFEST.bak
 README
 exp/
+tmp/
 Changes.bak

@@ -1,25 +1,30 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.07 - Sun Jul 22 09:34:00 EDT 2012
+    Fixes missing events for file moves on Linux (RT#78482)
+    - Adds the IN_MOVE flag to Linux::Inotify2 watcher
+    - Adds a timeout to the test scripts
+
 0.06 - Wed Dec 14 17:24:52 EST 2011
     Implemented a fix for RT#72849 (excessive warnings if there are broken
     symlinks on ext4)
 
 0.05 - Mon Feb  8 18:47:45 2010
-	Fixed bug in AFN::Event, where is_dir was incorrectly typed.
+    Fixed bug in AFN::Event, where is_dir was incorrectly typed.
 
 0.04 - Fri Jan 29 16:13:39 2010
-	Updated documentation to reflect ability to watch multiple 
-	directories. Other minor cleanup.
+    Updated documentation to reflect ability to watch multiple 
+    directories. Other minor cleanup.
 
 
 0.03 - Fri Dec 11 08:55:30 2009
-	Added namespace::autoclean and switched to apply_all_roles. This
-	gives us true per-instance application of backends
-	(Inotify/FSEvents/Fallback).
+    Added namespace::autoclean and switched to apply_all_roles. This
+    gives us true per-instance application of backends
+    (Inotify/FSEvents/Fallback).
 
 0.02 - Thu Dec 10 11:53:37 2009
-	Initial release on CPAN
+    Initial release on CPAN
 
 0.01 - 
-	Initial import
+    Initial import
 

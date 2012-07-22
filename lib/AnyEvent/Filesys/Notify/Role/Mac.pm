@@ -47,7 +47,7 @@ AnyEvent::Filesys::Notify::Role::Mac - Use Mac::FSEvents to watch for changed fi
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 AUTHOR
 
