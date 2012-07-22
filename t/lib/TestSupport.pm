@@ -3,10 +3,11 @@ package TestSupport;
 use File::Temp qw(tempdir);
 use File::Path;
 use File::Basename;
+use File::Copy qw(move);
 use autodie;
 
 use Exporter qw(import);
-our @EXPORT_OK = qw(create_test_files delete_test_files $dir);
+our @EXPORT_OK = qw(create_test_files delete_test_files move_test_files $dir);
 
 our $dir = tempdir( CLEANUP => 1 );
 my $size = 1;
@@ -33,6 +34,16 @@ sub delete_test_files {
         my $full_file = File::Spec->catfile( $dir, $file );
         if   ( -d $full_file ) { rmdir $full_file; }
         else                   { unlink $full_file; }
+    }
+}
+
+sub move_test_files {
+    my (%files) = @_;
+
+    while( my ($src, $dst) = each %files ){
+        my $full_src = File::Spec->catfile( $dir, $src );
+        my $full_dst = File::Spec->catfile( $dir, $dst );
+        move $full_src, $full_dst;
     }
 }
 

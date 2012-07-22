@@ -1,11 +1,12 @@
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use strict;
 use warnings;
+use File::Spec;
 use lib 't/lib';
 $|++;
 
-use TestSupport qw(create_test_files delete_test_files $dir);
+use TestSupport qw(create_test_files delete_test_files move_test_files $dir);
 
 use AnyEvent::Filesys::Notify;
 use AnyEvent::Impl::Perl;
@@ -16,8 +17,6 @@ create_test_files(qw(two/1));
 my $cv;
 my @expected = ();
 
-use Data::Dump;
-
 my $n = AnyEvent::Filesys::Notify->new(
     dirs => [
         File::Spec->catfile( $dir, 'one' ), File::Spec->catfile( $dir, 'two' )
@@ -25,7 +24,8 @@ my $n = AnyEvent::Filesys::Notify->new(
     interval => 0.5,
     filter   => sub { shift !~ qr/ignoreme/ },
     cb       => sub {
-        is_deeply( [ map { $_->type } @_ ], \@expected, '... got events' );
+        is_deeply( [ map { $_->type } @_ ], \@expected, '... got events: '
+            . join ',', @expected );
         $cv->send;
     },
 );
@@ -41,7 +41,8 @@ SKIP: {
       if $^O eq 'darwin';
 }
 
-diag "This might take a 5 seconds or so....";
+my $w = AnyEvent->timer( after => 9, cb => sub { die '... events timed out'; });
+diag "This might take a few seconds to run...";
 
 @expected = qw(created created created);
 create_test_files(qw(one/2 two/sub/2));
@@ -60,6 +61,11 @@ $cv->recv;
 
 @expected = qw(created);
 create_test_files(qw(one/ignoreme one/3));
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+@expected = qw(deleted created);
+move_test_files( 'one/3' => 'one/5' );
 $cv = AnyEvent->condvar;
 $cv->recv;
 
