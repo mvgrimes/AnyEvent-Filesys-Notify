@@ -97,7 +97,7 @@ True if C<$event-E<gt>type eq 'deleted'>.
 
 =head1 SEE ALSO
 
-L<AnyEvent::Filesys::Notify::Event>
+L<AnyEvent::Filesys::Notify>
 
 =head1 BUGS
 
