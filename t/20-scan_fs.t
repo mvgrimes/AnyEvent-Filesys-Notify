@@ -1,11 +1,12 @@
 use Test::More;
 
-use Data::Dump;
 use strict;
 use warnings;
 use lib 't/lib';
+use Data::Dump;
 
-use TestSupport qw(create_test_files delete_test_files $dir);
+use TestSupport qw(create_test_files delete_test_files move_test_files
+  modify_attrs_on_test_files $dir);
 use AnyEvent::Filesys::Notify;
 
 # Setup for tests
@@ -49,6 +50,13 @@ $new_fs = AnyEvent::Filesys::Notify::_scan_fs($dir);
 @events = AnyEvent::Filesys::Notify::_diff_fs( $old_fs, $new_fs );
 is( @events, 3, '_diff_fs: got create dir events' ) or diag ddx @events;
 is( $_->type, 'deleted', '... correct type' ) for @events;
+
+$old_fs = $new_fs;
+modify_attrs_on_test_files(qw(1 one));
+$new_fs = AnyEvent::Filesys::Notify::_scan_fs($dir);
+@events = AnyEvent::Filesys::Notify::_diff_fs( $old_fs, $new_fs );
+is( @events, 2, '_diff_fs: got attrib modify events' ) or diag ddx @events;
+is( $_->type, 'modified', '... correct type' ) for @events;
 
 done_testing();
 

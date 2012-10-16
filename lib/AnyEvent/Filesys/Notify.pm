@@ -120,10 +120,10 @@ sub _diff_fs {
 sub _is_path_modified {
     my ( $old_path, $new_path ) = @_;
 
+    return 1 if $new_path->{mode} != $old_path->{mode};
     return   if $new_path->{is_dir};
     return 1 if $new_path->{mtime} != $old_path->{mtime};
     return 1 if $new_path->{size} != $old_path->{size};
-    return 1 if $new_path->{mode} != $old_path->{mode};
     return;
 }
 
