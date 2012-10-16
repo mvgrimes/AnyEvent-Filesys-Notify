@@ -123,6 +123,7 @@ sub _is_path_modified {
     return   if $new_path->{is_dir};
     return 1 if $new_path->{mtime} != $old_path->{mtime};
     return 1 if $new_path->{size} != $old_path->{size};
+    return 1 if $new_path->{mode} != $old_path->{mode};
     return;
 }
 
@@ -140,6 +141,7 @@ sub _stat {
         path   => $path,
         mtime  => $stat[9],
         size   => $stat[7],
+        mode   => $stat[2],
         is_dir => -d _,
     };
 
