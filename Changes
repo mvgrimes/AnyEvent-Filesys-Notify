@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.08 - Tue Oct 16 12:08:22 EDT 2012
+    Adds support for changes in a file or directory's attributes. Thanks to
+    Florian Koch for the bug report (RT#80156) and patch.
+
 0.07 - Sun Jul 22 09:34:00 EDT 2012
     Fixes missing events for file moves on Linux (RT#78482)
     - Adds the IN_MOVE flag to Linux::Inotify2 watcher

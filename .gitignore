@@ -13,7 +13,9 @@ dist.ini
 MANIFEST
 AnyEvent-Filesys-Notify-*
 MANIFEST.bak
-README
 exp/
 tmp/
 Changes.bak
+
+# podweaver backups
+*.pm.bak
