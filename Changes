@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.09 - Mon Oct 22 11:06:48 EDT 2012
+    Skips attribute modification tests on MS Win platforms
+    Updates README with current year in copyright
+
 0.08 - Tue Oct 16 12:08:22 EDT 2012
     Adds support for changes in a file or directory's attributes. Thanks to
     Florian Koch for the bug report (RT#80156) and patch.
