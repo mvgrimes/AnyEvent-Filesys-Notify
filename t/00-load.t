@@ -14,6 +14,7 @@ BEGIN {
 
                 return if m{Linux$} and $^O ne 'linux';
                 return if m{Mac$}   and $^O ne 'darwin';
+                return if m{FreeBSD$} and $^O ne 'freebsd';
 
                 use_ok($_)
                   or die "Couldn't use_ok $_";
