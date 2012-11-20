@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.10 - Tue Nov 20 10:57:28 EST 2012
+    Move author/release tests to xt/
+    Skip the symlink tests on Win32
+
 0.09 - Mon Oct 22 11:06:48 EDT 2012
     Skips attribute modification tests on MS Win platforms
     Updates README with current year in copyright
