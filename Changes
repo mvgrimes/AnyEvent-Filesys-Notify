@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.11 - Tue Nov 20 11:27:16 EST 2012
+    Adds kqueue support and test on FreeBSD. Thanks to Gasol Wu
+    <gasol.wu@gmail.com> who provided the well done patch.
+
 0.10 - Tue Nov 20 10:57:28 EST 2012
     Move author/release tests to xt/
     Skip the symlink tests on Win32

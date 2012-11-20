@@ -77,7 +77,7 @@ AnyEvent::Filesys::Notify::Role::Linux - Use Linux::Inotify2 to watch for change
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 AUTHOR
 

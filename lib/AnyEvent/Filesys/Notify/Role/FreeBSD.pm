@@ -50,15 +50,20 @@ AnyEvent::Filesys::Notify::Role::FreeBSD - Use IO::KQueue to watch for changed f
 
 =head1 VERSION
 
-version 0.09
+version 0.11
+
+=head1 CONTRIBUTORS
+
+Thanks to Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the FreeBSD
+support for IO::KQueue.
 
 =head1 AUTHOR
 
-Gasol Wu, E<lt>gasol.wu@gmail.comE<gt>
+Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Gasol Wu, E<lt>gasol.wu@gmail.comE<gt>.
+This software is copyright (c) 2012 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

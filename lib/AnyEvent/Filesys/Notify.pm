@@ -12,7 +12,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.10';
+our $VERSION = '0.11';
 
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
 has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
@@ -207,7 +207,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
@@ -351,6 +351,11 @@ Alternatives to this module L<Filesys::Notify::Simple>, L<File::ChangeNotify>.
 =head1 BUGS
 
 Please report any bugs or suggestions at L<http://rt.cpan.org/>
+
+=head1 CONTRIBUTORS
+
+Thanks to Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the FreeBSD
+support for IO::KQueue.
 
 =head1 AUTHOR
 

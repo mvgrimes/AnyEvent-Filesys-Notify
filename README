@@ -3,7 +3,7 @@ NAME
     files/directories for changes
 
 VERSION
-    version 0.10
+    version 0.11
 
 SYNOPSIS
         use AnyEvent::Filesys::Notify;
@@ -133,6 +133,10 @@ BUGS
 
 AUTHOR
     Mark Grimes, <mgrimes@cpan.org>
+
+CONTRIBUTORS
+    Thanks to Gasol Wu <gasol.wu@gmail.com> who contributed the FreeBSD
+    support for IO::KQueue.
 
 COPYRIGHT AND LICENSE
     This software is copyright (c) 2012 by Mark Grimes, <mgrimes@cpan.org>.
