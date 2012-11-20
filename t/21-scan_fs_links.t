@@ -1,4 +1,3 @@
-
 use Test::More;
 use Data::Dump qw(ddx);
 use strict;
@@ -9,6 +8,8 @@ use TestSupport qw(create_test_files delete_test_files $dir);
 use AnyEvent::Filesys::Notify;
 
 # Tests for RT#72849
+
+plan( skip_all => 'symlink not implemented on Win32' ) if $^O eq 'MSWin32';
 
 # Setup for test by creating a broken symlink
 create_test_files('original');
