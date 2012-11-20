@@ -8,12 +8,13 @@ BEGIN {
     $^W = 1;
 }
 
-my @MODULES = ( 'Test::Pod::Coverage 1.08', );
+my @MODULES = ( 'Test::Pod::Coverage 1.08', "Pod::Coverage::TrustPod 0.10" );
 
 # Don't run tests during end-user installs
 use Test::More;
-plan( skip_all => 'Author tests not required for installation' )
-  unless ( $ENV{RELEASE_TESTING} );
+
+# plan( skip_all => 'Author tests not required for installation' )
+#   unless ( $ENV{RELEASE_TESTING} );
 
 # Load the testing modules
 foreach my $MODULE (@MODULES) {
@@ -25,6 +26,17 @@ foreach my $MODULE (@MODULES) {
     }
 }
 
-pod_coverage_ok();
+# Skip ::Linux unless we are on a linux box
+# Skip ::Mac unless we are on OS/X
+# Don't require any pod of Moose BUILD subs
+pod_coverage_ok( $_,
+    { trustme => ['BUILD'], coverage_class => 'Pod::Coverage::TrustPod' } )
+  for grep {
+    ( $^O ne 'linux' && $_ !~ /Linux$/ )
+      or $^O ne 'darwin'
+      && $_ !~ /Mac$/
+  } all_modules();
+
+done_testing;
 
 1;

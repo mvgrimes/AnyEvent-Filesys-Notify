@@ -12,8 +12,8 @@ my @MODULES = ( 'Test::DistManifest 1.003', );
 
 # Don't run tests during end-user installs
 use Test::More;
-plan( skip_all => 'Author tests not required for installation' )
-  unless ( $ENV{RELEASE_TESTING} );
+# plan( skip_all => 'Author tests not required for installation' )
+#   unless ( $ENV{RELEASE_TESTING} );
 
 # Load the testing modules
 foreach my $MODULE (@MODULES) {

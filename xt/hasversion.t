@@ -12,8 +12,8 @@ my @MODULES = ( 'Test::HasVersion 0.012', );
 
 # Don't run tests during end-user installs
 use Test::More;
-plan( skip_all => 'Author tests not required for installation' )
-  unless ( $ENV{RELEASE_TESTING} or $ENV{AUTOMATED_TESTING} );
+# plan( skip_all => 'Author tests not required for installation' )
+#   unless ( $ENV{RELEASE_TESTING} or $ENV{AUTOMATED_TESTING} );
 
 # Load the testing modules
 foreach my $MODULE (@MODULES) {
