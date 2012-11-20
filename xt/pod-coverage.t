@@ -26,15 +26,14 @@ foreach my $MODULE (@MODULES) {
     }
 }
 
-# Skip ::Linux unless we are on a linux box
-# Skip ::Mac unless we are on OS/X
-# Don't require any pod of Moose BUILD subs
+# Skip platform specific modules unless we are on that platform
+# Don't require any pod for Moose BUILD subs
 pod_coverage_ok( $_,
     { trustme => ['BUILD'], coverage_class => 'Pod::Coverage::TrustPod' } )
   for grep {
-    ( $^O ne 'linux' && $_ !~ /Linux$/ )
-      or $^O ne 'darwin'
-      && $_ !~ /Mac$/
+    not(   ( $^O ne 'linux' && $_ =~ /Linux$/ )
+        or ( $^O ne 'darwin'  && $_ =~ /Mac$/ )
+        or ( $^O ne 'freebsd' && $_ =~ /FreeBSD$/ ) )
   } all_modules();
 
 done_testing;
