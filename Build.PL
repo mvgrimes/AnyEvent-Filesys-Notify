@@ -33,7 +33,7 @@ my $build = Module::Build->new(
     meta_merge => {
         resources => {
             bugtracker =>
-              'http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyEvent-Filesys-Notify-Event',
+              'http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyEvent-Filesys-Notify',
             repository => 'http://github.com/mvgrimes/AnyEvent-Filesys-Notify'
         }
     },
