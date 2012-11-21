@@ -1,5 +1,8 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.12 - Wed Nov 21 08:22:55 EST 2012
+    Fixes missing file in MANIFEST and bumps versions
+
 0.11 - Tue Nov 20 11:27:16 EST 2012
     Adds kqueue support and test on FreeBSD. Thanks to Gasol Wu
     <gasol.wu@gmail.com> who provided the well done patch.
