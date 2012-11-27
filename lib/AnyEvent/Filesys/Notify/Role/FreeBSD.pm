@@ -50,7 +50,7 @@ AnyEvent::Filesys::Notify::Role::FreeBSD - Use IO::KQueue to watch for changed f
 
 =head1 VERSION
 
-version 0.12
+version 0.14
 
 =head1 CONTRIBUTORS
 

@@ -12,8 +12,9 @@ my $build = Module::Build->new(
         'Carp'                 => 0,
         'Try::Tiny'            => 0,
         'namespace::autoclean' => 0,
-        ( $^O eq 'linux'  ? ( 'Linux::Inotify2' => 0 ) : () ),
-        ( $^O eq 'darwin' ? ( 'Mac::FSEvents'   => 0 ) : () ),
+        ( $^O eq 'linux'   ? ( 'Linux::Inotify2' => 0 ) : () ),
+        ( $^O eq 'darwin'  ? ( 'Mac::FSEvents'   => 0 ) : () ),
+        ( $^O eq 'freebsd' ? ( 'IO::KQueue'      => 0 ) : () ),
     },
 
     build_requires => {
@@ -40,4 +41,3 @@ my $build = Module::Build->new(
 );
 
 $build->create_build_script;
-

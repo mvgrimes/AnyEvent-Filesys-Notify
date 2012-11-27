@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.14 - Tue Nov 27 08:58:47 EST 2012
+    Adds missing prereq for FreeBSD
+    Checks of Kqueue from TODO list
+
 0.12 - Wed Nov 21 08:22:55 EST 2012
     Fixes missing file in MANIFEST and bumps versions
 
