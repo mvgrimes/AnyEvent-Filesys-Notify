@@ -46,7 +46,7 @@ SKIP: {
       if $^O eq 'freebsd';
 }
 
-my $w = AnyEvent->timer( after => 9, cb => sub { die '... events timed out'; });
+my $w = AnyEvent->timer( after => 15, cb => sub { die '... events timed out'; });
 diag "This might take a few seconds to run...";
 
 @expected = qw(created created created);
@@ -79,14 +79,16 @@ move_test_files( 'one/3' => 'one/5' );
 $cv = AnyEvent->condvar;
 $cv->recv;
 
-@expected = qw(modified modified);
-modify_attrs_on_test_files(qw(two/1 two/sub));
-## ls: one/1 one/2 one/ignoreme one/5 two/1 two/sub
-$cv = AnyEvent->condvar;
-$cv->recv;
+SKIP: {
+    skip "skip attr mods on Win32", 1 if $^O eq 'MSWin32';
+    @expected = qw(modified modified);
+    modify_attrs_on_test_files(qw(two/1 two/sub));
+    ## ls: one/1 one/2 one/ignoreme one/5 two/1 two/sub
+    $cv = AnyEvent->condvar;
+    $cv->recv;
+}
 
 $n->filter(qr/onlyme/);
-
 @expected = qw(created);
 create_test_files(qw(one/onlyme one/4));
 ## ls: one/1 one/2 one/ignoreme one/onlyme one/4 one/5 two/1 two/sub

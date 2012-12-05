@@ -1,5 +1,8 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.15 - Wed Dec  5 12:01:07 EST 2012
+    Skips attribute modification tests on Win32.
+
 0.14 - Tue Nov 27 08:58:47 EST 2012
     Adds missing prereq for FreeBSD
     Checks of Kqueue from TODO list
