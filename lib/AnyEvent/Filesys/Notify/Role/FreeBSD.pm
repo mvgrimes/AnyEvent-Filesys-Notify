@@ -20,20 +20,21 @@ sub _init {
             fileno($fh),
             EVFILT_VNODE | EVFILT_READ,
             EV_ADD | EV_CLEAR,
-            NOTE_DELETE | NOTE_WRITE | NOTE_RENAME | NOTE_REVOKE
+            NOTE_DELETE | NOTE_WRITE | NOTE_RENAME | NOTE_REVOKE,
         );
         $fh;
     } @{ $self->dirs };
 
-    my $w; $w = AE::io $$kqueue, 0, sub {
-        if (my @events = $kqueue->kevent) {
+    my $w;
+    $w = AE::io $$kqueue, 0, sub {
+        if ( my @events = $kqueue->kevent ) {
             $self->_process_events(@events);
         }
     };
 
     $self->_fs_monitor($kqueue);
 
-    $self->_watcher({fhs => \@fhs, w => $w});
+    $self->_watcher( { fhs => \@fhs, w => $w } );
 
     return 1;
 }
@@ -50,7 +51,7 @@ AnyEvent::Filesys::Notify::Role::FreeBSD - Use IO::KQueue to watch for changed f
 
 =head1 VERSION
 
-version 0.15
+version 0.16
 
 =head1 CONTRIBUTORS
 

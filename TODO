@@ -8,3 +8,6 @@ o What happens if there is a change b/w ->new and loop()
 x Kqueue on BSD
 x Use Linux::Inotify2 on linux
 x Monitor multiple dirs
+o Rename Linux to Inotify2
+o Rename Mac to FSEvents
+o Rename FreeBSD to KQueue
