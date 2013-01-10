@@ -1,4 +1,4 @@
-use Test::More tests => 9;
+use Test::More;
 
 use strict;
 use warnings;
@@ -11,8 +11,11 @@ use TestSupport qw(create_test_files delete_test_files move_test_files $dir);
 use AnyEvent::Filesys::Notify;
 use AnyEvent::Impl::Perl;
 
-plan skip_all => 'Test only on Mac with IO::KQueue'
-  unless $^O eq 'darwin' and eval { require IO::KQueue; 1; };
+unless ($^O eq 'darwin' and eval { require IO::KQueue; 1; }) {
+    plan skip_all => 'Test only on Mac with IO::KQueue'
+} else {
+    plan tests => 9;
+}
 
 TODO: { todo_skip 'IO::KQueue is not working on Mac yet', 9;
 
