@@ -1,5 +1,12 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.17 - Wed Jan  9 19:53:53 EST 2013
+    - Renames backend roles to reflect the implementation rather than the O/S
+      (Inotify2, FSEvents and KQueue)
+    - Adds the 'backend' argument to the constructor allow the user to force
+      a particular backend
+    - Guides the user to avoid no_external in the docs
+
 0.15 - Wed Dec  5 12:01:07 EST 2012
     Skips attribute modification tests on Win32.
 
