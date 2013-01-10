@@ -175,21 +175,21 @@ sub _load_backend {
     } elsif ( $self->no_external ) {
         apply_all_roles( $self, "${AEFN}::Role::Fallback" );
     } elsif ( $^O eq 'linux' ) {
-        try { apply_all_roles( $self, "${AEFN}::Role::Linux" ); }
+        try { apply_all_roles( $self, "${AEFN}::Role::Inotify2" ); }
         catch {
             croak "Unable to load the Linux plugin. You may want to install "
               . "Linux::INotify2 or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'darwin' ) {
-        try { apply_all_roles( $self, "${AEFN}::Role::Mac" ); }
+        try { apply_all_roles( $self, "${AEFN}::Role::FSEvent" ); }
         catch {
             croak "Unable to load the Mac plugin. You may want to install "
               . "Mac::FSEvents or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'freebsd' ) {
-        try { apply_all_roles( $self, "${AEFN}::Role::FreeBSD" ); }
+        try { apply_all_roles( $self, "${AEFN}::Role::KQueue" ); }
         catch {
             croak "Unable to load the FreeBSD plugin. You may want to install "
               . "IO::KQueue or specify 'no_external' (but that is very "
