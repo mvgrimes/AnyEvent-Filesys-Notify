@@ -182,7 +182,7 @@ sub _load_backend {
               . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'darwin' ) {
-        try { apply_all_roles( $self, "${AEFN}::Role::FSEvent" ); }
+        try { apply_all_roles( $self, "${AEFN}::Role::FSEvents" ); }
         catch {
             croak "Unable to load the Mac plugin. You may want to install "
               . "Mac::FSEvents or specify 'no_external' (but that is very "
