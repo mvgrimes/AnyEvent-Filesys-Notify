@@ -24,8 +24,10 @@ my $n = AnyEvent::Filesys::Notify->new(
     interval => 0.5,
     filter   => sub { shift !~ qr/ignoreme/ },
     cb       => sub {
-        is_deeply( [ map { $_->type } @_ ], \@expected, '... got events: '
-            . join ',', @expected );
+        is_deeply(
+            [ map { $_->type } @_ ], \@expected,
+            '... got events: ' . join ',', @expected
+        );
         $cv->send;
     },
     no_external => 1,
@@ -35,7 +37,8 @@ isa_ok( $n, 'AnyEvent::Filesys::Notify' );
 ok( $n->does('AnyEvent::Filesys::Notify::Role::Fallback'),
     '... with the fallback role' );
 
-my $w = AnyEvent->timer( after => 9, cb => sub { die '... events timed out'; });
+my $w =
+  AnyEvent->timer( after => 9, cb => sub { die '... events timed out'; } );
 diag "This might take a few seconds to run...";
 
 @expected = qw(created created created);
@@ -71,4 +74,3 @@ $cv = AnyEvent->condvar;
 $cv->recv;
 
 ok( 1, '... arrived' );
-

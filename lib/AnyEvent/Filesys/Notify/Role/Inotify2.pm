@@ -1,4 +1,4 @@
-package AnyEvent::Filesys::Notify::Role::Linux;
+package AnyEvent::Filesys::Notify::Role::Inotify2;
 
 # ABSTRACT: Use Linux::Inotify2 to watch for changed files
 
@@ -73,11 +73,11 @@ __END__
 
 =head1 NAME
 
-AnyEvent::Filesys::Notify::Role::Linux - Use Linux::Inotify2 to watch for changed files
+AnyEvent::Filesys::Notify::Role::Inotify2 - Use Linux::Inotify2 to watch for changed files
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 AUTHOR
 

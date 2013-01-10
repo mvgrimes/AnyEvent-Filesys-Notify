@@ -26,8 +26,10 @@ my $n = AnyEvent::Filesys::Notify->new(
     interval => 0.5,
     filter   => sub { shift !~ qr/ignoreme/ },
     cb       => sub {
-        is_deeply( [ map { $_->type } @_ ], \@expected, '... got events: '
-            . join ',', @expected );
+        is_deeply(
+            [ map { $_->type } @_ ], \@expected,
+            '... got events: ' . join ',', @expected
+        );
         $cv->send;
     },
 );
@@ -35,18 +37,19 @@ isa_ok( $n, 'AnyEvent::Filesys::Notify' );
 
 SKIP: {
     skip "not sure which os we are on", 1 unless $^O =~ /linux|darwin|freebsd/;
-    ok( $n->does('AnyEvent::Filesys::Notify::Role::Linux'),
+    ok( $n->does('AnyEvent::Filesys::Notify::Role::Inotify2'),
         '... with the linux role' )
       if $^O eq 'linux';
-    ok( $n->does('AnyEvent::Filesys::Notify::Role::Mac'),
+    ok( $n->does('AnyEvent::Filesys::Notify::Role::FSEvents'),
         '... with the mac role' )
       if $^O eq 'darwin';
-    ok( $n->does('AnyEvent::Filesys::Notify::Role::FreeBSD'),
+    ok( $n->does('AnyEvent::Filesys::Notify::Role::KQueue'),
         '... with the freebsd role' )
       if $^O eq 'freebsd';
 }
 
-my $w = AnyEvent->timer( after => 15, cb => sub { die '... events timed out'; });
+my $w =
+  AnyEvent->timer( after => 15, cb => sub { die '... events timed out'; } );
 diag "This might take a few seconds to run...";
 
 @expected = qw(created created created);
@@ -96,4 +99,3 @@ $cv = AnyEvent->condvar;
 $cv->recv;
 
 ok( 1, '... arrived' );
-

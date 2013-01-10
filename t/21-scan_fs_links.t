@@ -35,4 +35,3 @@ ok( !@warnings_emitted, '... without warnings' )
   or diag join "\n", @warnings_emitted;
 
 done_testing();
-

@@ -12,10 +12,10 @@ subtest 'Try to load the correct backend for this O/S' => sub {
     if ( $^O eq 'linux' and eval { require Linux::Inotify2; 1 } ) {
         my $w = AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );
         isa_ok( $w, $AEFN );
-        ok( !$w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-        ok( $w->does( $AEFN . '::Role::Linux' ),     '... Inotify2' );
-        ok( !$w->does( $AEFN . '::Role::Mac' ),      '... FSEvents' );
-        ok( !$w->does( $AEFN . '::Role::FreeBSD' ),  '... KQueue' );
+        ok( !$w->does("${AEFN}::Role::Fallback"), '... Fallback' );
+        ok( $w->does("${AEFN}::Role::Inotify2"),  '... Inotify2' );
+        ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+        ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
 
     } elsif (
         $^O eq 'darwin' and eval {
@@ -25,10 +25,10 @@ subtest 'Try to load the correct backend for this O/S' => sub {
     {
         my $w = AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );
         isa_ok( $w, $AEFN );
-        ok( !$w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-        ok( !$w->does( $AEFN . '::Role::Linux' ),    '... Inotify2' );
-        ok( $w->does( $AEFN . '::Role::Mac' ),       '... FSEvents' );
-        ok( !$w->does( $AEFN . '::Role::FreeBSD' ),  '... KQueue' );
+        ok( !$w->does("${AEFN}::Role::Fallback"), '... Fallback' );
+        ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+        ok( $w->does("${AEFN}::Role::FSEvents"),  '... FSEvents' );
+        ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
 
     } elsif (
         $^O eq 'freebsd' and eval {
@@ -38,18 +38,18 @@ subtest 'Try to load the correct backend for this O/S' => sub {
     {
         my $w = AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );
         isa_ok( $w, $AEFN );
-        ok( !$w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-        ok( !$w->does( $AEFN . '::Role::Linux' ),    '... Inotify2' );
-        ok( !$w->does( $AEFN . '::Role::Mac' ),      '... FSEvents' );
-        ok( $w->does( $AEFN . '::Role::FreeBSD' ),   '... KQueue' );
+        ok( !$w->does("${AEFN}::Role::Fallback"), '... Fallback' );
+        ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+        ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+        ok( $w->does("${AEFN}::Role::KQueue"),    '... KQueue' );
 
     } else {
         my $w = AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );
         isa_ok( $w, $AEFN );
-        ok( $w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-        ok( !$w->does( $AEFN . '::Role::Linux' ),   '... Inotify2' );
-        ok( !$w->does( $AEFN . '::Role::Mac' ),     '... FSEvents' );
-        ok( !$w->does( $AEFN . '::Role::FreeBSD' ), '... KQueue' );
+        ok( $w->does("${AEFN}::Role::Fallback"),  '... Fallback' );
+        ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+        ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+        ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
     }
 };
 
@@ -60,10 +60,10 @@ subtest 'Try to load the fallback backend via no_external' => sub {
         no_external => 1,
     );
     isa_ok( $w, $AEFN );
-    ok( $w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-    ok( !$w->does( $AEFN . '::Role::Linux' ),   '... Inotify2' );
-    ok( !$w->does( $AEFN . '::Role::Mac' ),     '... FSEvents' );
-    ok( !$w->does( $AEFN . '::Role::FreeBSD' ), '... KQueue' );
+    ok( $w->does("${AEFN}::Role::Fallback"),  '... Fallback' );
+    ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+    ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+    ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
 };
 
 subtest 'Try to specify Fallback via the backend arguement' => sub {
@@ -73,10 +73,10 @@ subtest 'Try to specify Fallback via the backend arguement' => sub {
         backend => 'Fallback',
     );
     isa_ok( $w, $AEFN );
-    ok( $w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-    ok( !$w->does( $AEFN . '::Role::Linux' ),   '... Inotify2' );
-    ok( !$w->does( $AEFN . '::Role::Mac' ),     '... FSEvents' );
-    ok( !$w->does( $AEFN . '::Role::FreeBSD' ), '... KQueue' );
+    ok( $w->does("${AEFN}::Role::Fallback"),  '... Fallback' );
+    ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+    ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+    ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
 };
 
 subtest 'Try to specify +AEFNR::Fallback via the backend arguement' => sub {
@@ -86,10 +86,10 @@ subtest 'Try to specify +AEFNR::Fallback via the backend arguement' => sub {
         backend => "+${AEFN}::Role::Fallback",
     );
     isa_ok( $w, $AEFN );
-    ok( $w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-    ok( !$w->does( $AEFN . '::Role::Linux' ),   '... Inotify2' );
-    ok( !$w->does( $AEFN . '::Role::Mac' ),     '... FSEvents' );
-    ok( !$w->does( $AEFN . '::Role::FreeBSD' ), '... KQueue' );
+    ok( $w->does("${AEFN}::Role::Fallback"),  '... Fallback' );
+    ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+    ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+    ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
 };
 
 if ( $^O eq 'darwin' and eval { require IO::KQueue; 1; } ) {
@@ -110,10 +110,10 @@ if ( $^O eq 'darwin' and eval { require IO::KQueue; 1; } ) {
                 );
             };
             isa_ok( $w, $AEFN );
-            ok( !$w->does( $AEFN . '::Role::Fallback' ), '... Fallback' );
-            ok( !$w->does( $AEFN . '::Role::Linux' ),    '... Inotify2' );
-            ok( !$w->does( $AEFN . '::Role::Mac' ),      '... FSEvents' );
-            ok( $w->does( $AEFN . '::Role::FreeBSD' ),   '... KQueue' );
+            ok( !$w->does("${AEFN}::Role::Fallback"), '... Fallback' );
+            ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+            ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+            ok( $w->does("${AEFN}::Role::KQueue"),    '... KQueue' );
           }
     }
 }

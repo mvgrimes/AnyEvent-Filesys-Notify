@@ -1,4 +1,4 @@
-package AnyEvent::Filesys::Notify::Role::FreeBSD;
+package AnyEvent::Filesys::Notify::Role::KQueue;
 
 # ABSTRACT: Use IO::KQueue to watch for changed files
 
@@ -47,11 +47,11 @@ __END__
 
 =head1 NAME
 
-AnyEvent::Filesys::Notify::Role::FreeBSD - Use IO::KQueue to watch for changed files
+AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed files
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 CONTRIBUTORS
 

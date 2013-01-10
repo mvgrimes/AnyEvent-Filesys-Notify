@@ -1,4 +1,4 @@
-package AnyEvent::Filesys::Notify::Role::Mac;
+package AnyEvent::Filesys::Notify::Role::FSEvents;
 
 # ABSTRACT: Use Mac::FSEvents to watch for changed files
 
@@ -43,11 +43,11 @@ __END__
 
 =head1 NAME
 
-AnyEvent::Filesys::Notify::Role::Mac - Use Mac::FSEvents to watch for changed files
+AnyEvent::Filesys::Notify::Role::FSEvents - Use Mac::FSEvents to watch for changed files
 
 =head1 VERSION
 
-version 0.16
+version 0.17
 
 =head1 AUTHOR
 

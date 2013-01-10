@@ -35,11 +35,11 @@ my $n = AnyEvent::Filesys::Notify->new(
         );
         $cv->send;
     },
-    backend => 'Fallback',
+    backend => 'KQueue',
 );
 
 isa_ok( $n, 'AnyEvent::Filesys::Notify' );
-ok( $n->does('AnyEvent::Filesys::Notify::Role::Fallback'),
+ok( $n->does('AnyEvent::Filesys::Notify::Role::KQueue'),
     '... with the fallback role' );
 
 my $w =

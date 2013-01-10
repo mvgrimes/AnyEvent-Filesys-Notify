@@ -43,14 +43,14 @@ sub delete_test_files {
 sub move_test_files {
     my (%files) = @_;
 
-    while( my ($src, $dst) = each %files ){
+    while ( my ( $src, $dst ) = each %files ) {
         my $full_src = File::Spec->catfile( $dir, $src );
         my $full_dst = File::Spec->catfile( $dir, $dst );
         move $full_src, $full_dst;
     }
 }
 
-sub modify_attrs_on_test_files{
+sub modify_attrs_on_test_files {
     my (@files) = @_;
 
     for my $file (@files) {
