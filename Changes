@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.18 - Thu Jan 10 10:39:22 EST 2013
+    Fixes non-mac bug where 'plan' is called twice
+    Thanks to syohex for the patch.
+
 0.17 - Wed Jan  9 19:53:53 EST 2013
     - Renames backend roles to reflect the implementation rather than the O/S
       (Inotify2, FSEvents and KQueue)
