@@ -73,12 +73,23 @@ METHODS
         directory(ies) is detected. The callback is passed a list of
         AnyEvent::Filesys::Notify::Events. Required.
 
+    backend
+            backend => 'Fallback',
+            backend => 'FreeBSD',
+            backend => '+My::Filesys::Notify::Role::Backend',
+
+        Force the use of the specified backend. The backend is assumed to
+        have the "AnyEvent::Filesys::Notify::Role" prefix, but you can force
+        a fully qualified name by prefixing it with a plus. Optional.
+
     no_external
             no_external => 1,
 
-        Force the use of the "Fallback" watcher implementation. This is not
-        encouraged as the "Fallback" implement is very inefficient, but it
-        does not require either Linux::INotify2 nor Mac::FSEvents. Optional.
+        This is retained for backward compatibility. Using "backend ="
+        'Fallback'> is preferred. Force the use of the "Fallback" watcher
+        implementation. This is not encouraged as the "Fallback" implement
+        is very inefficient, but it does not require either Linux::INotify2
+        nor Mac::FSEvents. Optional.
 
 WATCHER IMPLEMENTATIONS
   Linux
@@ -130,6 +141,11 @@ SEE ALSO
 
 BUGS
     Please report any bugs or suggestions at <http://rt.cpan.org/>
+
+    Forcing the "IO::KQueue" backend on a Mac does not seem to work. The
+    "IO::KQueue" backend seems to be working fine on FreeBSD. I don't have
+    the experience or time to fix it on a Mac. I would greatly appreciate
+    any help troubleshooting this.
 
 CONTRIBUTORS
     Thanks to Gasol Wu <gasol.wu@gmail.com> who contributed the FreeBSD

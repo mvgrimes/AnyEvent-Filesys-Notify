@@ -304,8 +304,6 @@ Force the use of the specified backend. The backend is assumed to have the
 C<AnyEvent::Filesys::Notify::Role> prefix, but you can force a fully qualified
 name by prefixing it with a plus. Optional.
 
-=back
-
 =item no_external
 
     no_external => 1,
@@ -390,7 +388,7 @@ Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2012 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2013 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
