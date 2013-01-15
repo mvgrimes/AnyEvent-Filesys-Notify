@@ -3,7 +3,7 @@ NAME
     files/directories for changes
 
 VERSION
-    version 0.18
+    version 0.19
 
 SYNOPSIS
         use AnyEvent::Filesys::Notify;
