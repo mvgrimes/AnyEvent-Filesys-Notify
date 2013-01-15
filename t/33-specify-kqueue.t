@@ -17,8 +17,6 @@ unless ($^O eq 'darwin' and eval { require IO::KQueue; 1; }) {
     plan tests => 9;
 }
 
-TODO: { todo_skip 'IO::KQueue is not working on Mac yet', 9;
-
 create_test_files(qw(one/1));
 create_test_files(qw(two/1));
 
@@ -29,9 +27,8 @@ my $n = AnyEvent::Filesys::Notify->new(
     dirs => [
         File::Spec->catfile( $dir, 'one' ), File::Spec->catfile( $dir, 'two' )
     ],
-    interval => 0.5,
-    filter   => sub { shift !~ qr/ignoreme/ },
-    cb       => sub {
+    filter => sub { shift !~ qr/ignoreme/ },
+    cb     => sub {
         is_deeply(
             [ map { $_->type } @_ ], \@expected,
             '... got events: ' . join ',', @expected
@@ -82,4 +79,3 @@ $cv = AnyEvent->condvar;
 $cv->recv;
 
 ok( 1, '... arrived' );
-}

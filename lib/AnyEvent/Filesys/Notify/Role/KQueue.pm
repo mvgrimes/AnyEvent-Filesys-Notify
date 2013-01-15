@@ -16,11 +16,13 @@ sub _init {
 
     my @fhs = map {
         open my $fh, '<', $_ or croak "Can't open file: $_";
+
         $kqueue->EV_SET(
             fileno($fh),
-            EVFILT_VNODE | EVFILT_READ,
-            EV_ADD | EV_CLEAR,
-            NOTE_DELETE | NOTE_WRITE | NOTE_RENAME | NOTE_REVOKE,
+            EVFILT_VNODE,
+            EV_ADD | EV_ENABLE,
+            NOTE_DELETE | NOTE_WRITE | NOTE_EXTEND | NOTE_ATTRIB |
+            NOTE_LINK | NOTE_RENAME | NOTE_REVOKE,
         );
         $fh;
     } @{ $self->dirs };
@@ -51,7 +53,7 @@ AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed fi
 
 =head1 VERSION
 
-version 0.18
+version 0.19
 
 =head1 CONTRIBUTORS
 

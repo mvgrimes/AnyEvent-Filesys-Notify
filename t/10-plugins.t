@@ -94,28 +94,20 @@ subtest 'Try to specify +AEFNR::Fallback via the backend arguement' => sub {
 
 if ( $^O eq 'darwin' and eval { require IO::KQueue; 1; } ) {
 
-    # IO::KQueue fails mightily with "invalid arguement" on a Mac. IO::KQueue
-    # seems to be working fine on FreeBSD. I don't have the experience or time
-    # to fix it on a Mac.  I would greatly appreciate any help troubleshooting.
-
-  TODO: {
-        todo_skip 'IO::KQueue reports invalid arguement', 5;
-
-        subtest 'Try to force KQueue on Mac with IO::KQueue installed' => sub {
-            my $w = eval {
-                AnyEvent::Filesys::Notify->new(
-                    dirs    => ['t'],
-                    cb      => sub { },
-                    backend => 'FreeBSD'
-                );
-            };
-            isa_ok( $w, $AEFN );
-            ok( !$w->does("${AEFN}::Role::Fallback"), '... Fallback' );
-            ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
-            ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
-            ok( $w->does("${AEFN}::Role::KQueue"),    '... KQueue' );
-          }
-    }
+    subtest 'Try to force KQueue on Mac with IO::KQueue installed' => sub {
+        my $w = eval {
+            AnyEvent::Filesys::Notify->new(
+                dirs    => ['t'],
+                cb      => sub { },
+                backend => 'KQueue'
+            );
+        };
+        isa_ok( $w, $AEFN );
+        ok( !$w->does("${AEFN}::Role::Fallback"), '... Fallback' );
+        ok( !$w->does("${AEFN}::Role::Inotify2"), '... Inotify2' );
+        ok( !$w->does("${AEFN}::Role::FSEvents"), '... FSEvents' );
+        ok( $w->does("${AEFN}::Role::KQueue"),    '... KQueue' );
+      }
 }
 
 done_testing;
