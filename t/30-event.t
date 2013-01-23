@@ -30,6 +30,7 @@ my $n = AnyEvent::Filesys::Notify->new(
             [ map { $_->type } @_ ], \@expected,
             '... got events: ' . join ',', @expected
         );
+        diag "... @{[ join ',', map { $_->type } @_ ]} == @{[ join ',', @expected ]}";
         $cv->send;
     },
 );
@@ -57,30 +58,37 @@ create_test_files(qw(one/2 two/sub/2));
 ## ls: one/1 one/2 two/1 two/sub/2
 $cv = AnyEvent->condvar;
 $cv->recv;
+# Inserting some diag statements so we can see where things go boom on 
+# cpan smokers on FreeBSD
+diag "finished 3: create^3";
 
 @expected = qw(modified);
 create_test_files(qw(one/2));
 ## ls: one/1 one/2 two/1 two/sub/2
 $cv = AnyEvent->condvar;
 $cv->recv;
+diag "finished 4: modified";
 
 @expected = qw(deleted);
 delete_test_files(qw(two/sub/2));
 ## ls: one/1 one/2 two/1 two/sub
 $cv = AnyEvent->condvar;
 $cv->recv;
+diag "finished 5: deleted";
 
 @expected = qw(created);
 create_test_files(qw(one/ignoreme one/3));
 ## ls: one/1 one/2 one/ignoreme one/3 two/1 two/sub
 $cv = AnyEvent->condvar;
 $cv->recv;
+diag "finished 6: created with ignore";
 
 @expected = qw(deleted created);
 move_test_files( 'one/3' => 'one/5' );
 ## ls: one/1 one/2 one/ignoreme one/5 two/1 two/sub
 $cv = AnyEvent->condvar;
 $cv->recv;
+diag "finished 7: move";
 
 SKIP: {
     skip "skip attr mods on Win32", 1 if $^O eq 'MSWin32';
@@ -89,6 +97,7 @@ SKIP: {
     ## ls: one/1 one/2 one/ignoreme one/5 two/1 two/sub
     $cv = AnyEvent->condvar;
     $cv->recv;
+    diag "finished 8: attributes";
 }
 
 $n->filter(qr/onlyme/);
@@ -97,5 +106,7 @@ create_test_files(qw(one/onlyme one/4));
 ## ls: one/1 one/2 one/ignoreme one/onlyme one/4 one/5 two/1 two/sub
 $cv = AnyEvent->condvar;
 $cv->recv;
+diag "finished 9: created filter";
 
 ok( 1, '... arrived' );
+diag "finsihed 10: arrived";
