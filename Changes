@@ -1,5 +1,8 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.20_01 - Wed Jan 23 08:21:38 EST 2013
+    Adds diag statement to test so we can see why smokers are failing
+
 0.19 - Mon Jan 14 20:30:38 EST 2013
     Fixes KQueue bugs.  This works on a Mac, hoping it will work on FreeBSD.
 
