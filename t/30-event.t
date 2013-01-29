@@ -1,4 +1,4 @@
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use strict;
 use warnings;
@@ -107,6 +107,14 @@ create_test_files(qw(one/onlyme one/4));
 $cv = AnyEvent->condvar;
 $cv->recv;
 diag "finished 9: created filter";
+
+@expected = qw(modified);
+open my $fh, ">>", "$TestSupport::dir/one/onlyme" or die;
+syswrite $fh, "writing...\n";
+# leave open
+# ls: one/1 one/2 one/ignoreme one/onlyme one/4 one/5 two/1 two/sub
+$cv = AnyEvent->condvar;
+$cv->recv;
 
 ok( 1, '... arrived' );
 diag "finsihed 10: arrived";

@@ -1,4 +1,4 @@
-use Test::More tests => 9;
+use Test::More tests => 10;
 
 use strict;
 use warnings;
@@ -70,6 +70,14 @@ $n->filter(qr/onlyme/);
 
 @expected = qw(created);
 create_test_files(qw(one/onlyme one/4));
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+@expected = qw(modified);
+open my $fh, ">>", "$TestSupport::dir/one/onlyme" or die;
+syswrite $fh, "writing...";
+# leave open
+# ls: one/1 one/2 one/ignoreme one/onlyme one/4 one/5 two/1 two/sub
 $cv = AnyEvent->condvar;
 $cv->recv;
 

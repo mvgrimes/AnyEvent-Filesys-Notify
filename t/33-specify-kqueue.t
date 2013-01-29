@@ -14,7 +14,7 @@ use AnyEvent::Impl::Perl;
 unless ($^O eq 'darwin' and eval { require IO::KQueue; 1; }) {
     plan skip_all => 'Test only on Mac with IO::KQueue'
 } else {
-    plan tests => 9;
+    plan tests => 10;
 }
 
 create_test_files(qw(one/1));
@@ -75,6 +75,14 @@ $n->filter(qr/onlyme/);
 
 @expected = qw(created);
 create_test_files(qw(one/onlyme one/4));
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+@expected = qw(modified);
+open my $fh, ">>", "$TestSupport::dir/one/onlyme" or die;
+syswrite $fh, "writing...";
+# leave open
+# ls: one/1 one/2 one/ignoreme one/onlyme one/4 one/5 two/1 two/sub
 $cv = AnyEvent->condvar;
 $cv->recv;
 
