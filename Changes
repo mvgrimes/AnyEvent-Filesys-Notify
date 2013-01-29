@@ -1,5 +1,11 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.20_02 - Tue Jan 29 10:02:13 EST 2013
+    Marks tests as TODO if we are on gnufreebsd
+    - Based on diag output, tests appear to work, but we get failures from
+      cpantesters. I don't have access to this platform to investigate
+      further.
+
 0.20_01 - Wed Jan 23 08:21:38 EST 2013
     Adds diag statement to test so we can see why smokers are failing
 
