@@ -1,13 +1,14 @@
 Changes for AnyEvent::Filesys::Notify
 
-0.20_02 - Tue Jan 29 10:02:13 EST 2013
-    Marks tests as TODO if we are on gnufreebsd
+0.21 - Mon Feb  4 15:52:47 EST 2013
+    Converts from File::Find::Rule to Path::Interator::Rule
+    - Should speed things up marginally.
+    - Adds benchmark and profiling tools
+
+    Marks tests as TODO if we are on gnufreebsd or gnukfreebsd
     - Based on diag output, tests appear to work, but we get failures from
       cpantesters. I don't have access to this platform to investigate
       further.
-
-0.20_01 - Wed Jan 23 08:21:38 EST 2013
-    Adds diag statement to test so we can see why smokers are failing
 
 0.19 - Mon Jan 14 20:30:38 EST 2013
     Fixes KQueue bugs.  This works on a Mac, hoping it will work on FreeBSD.

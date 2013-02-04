@@ -16,3 +16,6 @@ weaver.ini
 exp/
 tmp/
 ^MYMETA\.json$
+^t/data
+^nytprof/
+^nytprof.out
