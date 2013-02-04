@@ -38,7 +38,7 @@ isa_ok( $n, 'AnyEvent::Filesys::Notify' );
 
 {
 local $TODO = "Tests fail on gnufreebsd for unknown reason, ignoring."
-    if $^O =~ /gnufreebsd/;
+    if $^O =~ /gnuk?freebsd/i;
 
 SKIP: {
     skip "not sure which os we are on", 1 unless $^O =~ /linux|darwin|freebsd/;
