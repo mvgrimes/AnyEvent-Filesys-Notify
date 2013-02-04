@@ -16,6 +16,8 @@ MANIFEST.bak
 exp/
 tmp/
 Changes.bak
+t/data
+nytprof*
 
 # podweaver backups
 *.pm.bak
