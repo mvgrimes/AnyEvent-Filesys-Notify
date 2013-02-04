@@ -6,7 +6,7 @@ use Moose;
 use Moose::Util qw(apply_all_roles);
 use namespace::autoclean;
 use AnyEvent;
-use File::Find::Rule;
+use Path::Iterator::Rule;
 use Cwd qw/abs_path/;
 use AnyEvent::Filesys::Notify::Event;
 use Carp;
@@ -74,7 +74,9 @@ sub _scan_fs {
 
     my $fs_stats = {};
 
-    for my $file ( File::Find::Rule->in(@paths) ) {
+    my $rule = Path::Iterator::Rule->new;
+    my $next = $rule->iter(@paths);
+    while ( my $file = $next->() ) {
         my $stat = _stat($file)
           or next; # Skip files that we can't stat (ie, broken symlinks on ext4)
         $fs_stats->{ abs_path($file) } = $stat;
