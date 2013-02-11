@@ -2,7 +2,8 @@ package AnyEvent::Filesys::Notify::Event;
 
 # ABSTRACT: Object to report changes in the monitored filesystem
 
-use Moose;
+use Moo;
+use MooX::late;
 
 has path => ( is => 'ro', isa => 'Str', required => 1 );
 has type => ( is => 'ro', isa => 'Str', required => 1 );

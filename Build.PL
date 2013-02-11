@@ -5,7 +5,9 @@ my $build = Module::Build->new(
     create_readme => 1,
 
     requires => {
-        'Moose'                => 0,
+        'Moo'                  => 0,
+        'MooX::late'           => 0,
+        'MooX::Types::MooseLike::Base' => 0,
         'AnyEvent'             => 0,
         'Path::Iterator::Rule' => 0,
         'Cwd'                  => 0,

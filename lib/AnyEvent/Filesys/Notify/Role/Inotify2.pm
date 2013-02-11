@@ -2,7 +2,8 @@ package AnyEvent::Filesys::Notify::Role::Inotify2;
 
 # ABSTRACT: Use Linux::Inotify2 to watch for changed files
 
-use Moose::Role;
+use Moo::Role;
+use MooX::late;
 use namespace::autoclean;
 use AnyEvent;
 use Linux::Inotify2;
