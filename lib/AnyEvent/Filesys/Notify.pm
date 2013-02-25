@@ -3,8 +3,8 @@ package AnyEvent::Filesys::Notify;
 # ABSTRACT: An AnyEvent compatible module to monitor files/directories for changes
 
 use Moo;
+use Moo::Role ();
 use MooX::late;
-use Role::Tiny;
 use namespace::autoclean;
 use AnyEvent;
 use Path::Iterator::Rule;
@@ -169,37 +169,37 @@ sub _load_backend {
         my $backend = $self->backend;
         $backend = $prefix . $backend unless $backend =~ s{^\+}{};
 
-        try { Role::Tiny->apply_roles_to_object( $self, ($backend) ); }
+        try { Moo::Role->apply_roles_to_object( $self, $backend ); }
         catch {
             croak "Unable to load the specified backend ($backend). You may "
               . "need to install Linux::INotify2, Mac::FSEvents or IO::KQueue:"
               . "\n$_";
         }
     } elsif ( $self->no_external ) {
-        Role::Tiny->apply_roles_to_object( $self, ("${AEFN}::Role::Fallback") );
+        Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::Fallback" );
     } elsif ( $^O eq 'linux' ) {
-        try { Role::Tiny->apply_roles_to_object( $self, ("${AEFN}::Role::Inotify2" )); }
+        try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::Inotify2"); }
         catch {
             croak "Unable to load the Linux plugin. You may want to install "
               . "Linux::INotify2 or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'darwin' ) {
-        try { Role::Tiny->apply_roles_to_object( $self, ("${AEFN}::Role::FSEvents") ); }
+        try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::FSEvents" ); }
         catch {
             croak "Unable to load the Mac plugin. You may want to install "
               . "Mac::FSEvents or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'freebsd' ) {
-        try { Role::Tiny->apply_roles_to_object( $self, ("${AEFN}::Role::KQueue") ); }
+        try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::KQueue" ); }
         catch {
             croak "Unable to load the FreeBSD plugin. You may want to install "
               . "IO::KQueue or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } else {
-        Role::Tiny->apply_roles_to_object( $self, ("${AEFN}::Role::Fallback") );
+        Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::Fallback" );
     }
 
     return 1;
