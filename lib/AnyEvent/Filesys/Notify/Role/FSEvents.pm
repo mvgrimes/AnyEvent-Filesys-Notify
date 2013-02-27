@@ -4,7 +4,7 @@ package AnyEvent::Filesys::Notify::Role::FSEvents;
 
 use Moo::Role;
 use MooX::late;
-use namespace::autoclean;
+use namespace::sweep;
 use AnyEvent;
 use Mac::FSEvents;
 use Carp;

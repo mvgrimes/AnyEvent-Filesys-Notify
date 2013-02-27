@@ -4,7 +4,7 @@ package AnyEvent::Filesys::Notify::Role::Fallback;
 
 use Moo::Role;
 use MooX::late;
-use namespace::autoclean;
+use namespace::sweep;
 use AnyEvent;
 use Carp;
 

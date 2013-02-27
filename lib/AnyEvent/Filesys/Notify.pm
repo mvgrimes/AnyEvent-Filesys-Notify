@@ -5,7 +5,7 @@ package AnyEvent::Filesys::Notify;
 use Moo;
 use Moo::Role ();
 use MooX::late;
-use namespace::autoclean;
+use namespace::sweep;
 use AnyEvent;
 use Path::Iterator::Rule;
 use Cwd qw/abs_path/;
@@ -204,8 +204,6 @@ sub _load_backend {
 
     return 1;
 }
-
-__PACKAGE__->meta->make_immutable;
 
 1;
 

@@ -5,15 +5,15 @@ my $build = Module::Build->new(
     create_readme => 1,
 
     requires => {
-        'Moo'                  => 0,
-        'MooX::late'           => 0,
+        'Moo'                          => 0,
+        'MooX::late'                   => 0,
         'MooX::Types::MooseLike::Base' => 0,
-        'AnyEvent'             => 0,
-        'Path::Iterator::Rule' => 0,
-        'Cwd'                  => 0,
-        'Carp'                 => 0,
-        'Try::Tiny'            => 0,
-        'namespace::autoclean' => 0,
+        'AnyEvent'                     => 0,
+        'Path::Iterator::Rule'         => 0,
+        'Cwd'                          => 0,
+        'Carp'                         => 0,
+        'Try::Tiny'                    => 0,
+        'namespace::sweep'             => 0,
         ( $^O eq 'linux'   ? ( 'Linux::Inotify2' => 0 ) : () ),
         ( $^O eq 'darwin'  ? ( 'Mac::FSEvents'   => 0 ) : () ),
         ( $^O eq 'freebsd' ? ( 'IO::KQueue'      => 0 ) : () ),
@@ -30,7 +30,6 @@ my $build = Module::Build->new(
         'File::Path'            => 0,
         'autodie'               => 0,
         'Exporter'              => 0,
-        'Data::Dump'            => 0,
     },
 
     meta_merge => {
