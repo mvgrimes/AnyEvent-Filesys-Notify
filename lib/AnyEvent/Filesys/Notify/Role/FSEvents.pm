@@ -17,21 +17,21 @@ sub _init {
     my @fs_monitors =
       map { Mac::FSEvents->new( { path => $_, latency => $self->interval, } ) }
       @{ $self->dirs };
-    $self->_fs_monitor( \@fs_monitors );
 
     # Create an AnyEvent->io watcher for each fs_monitor
-    # Done in a block so we can scope and preserve the $fs_monitor
-    my @watchers =
-      map {                     ## no critic (ProhibitComplexMappings)
-        my $fs_monitor = $_;    # needed to scope $fs_monitor
-        AnyEvent->io(
-            fh   => $fs_monitor->watch,
-            poll => 'r',
-            cb   => sub {
-                $self->_process_events( $fs_monitor->read_events() );
-            } )
-      } @fs_monitors;
+    my @watchers;
+    for my $fs_monitor (@fs_monitors) {
 
+        my $w = AE::io $fs_monitor->watch, 0, sub {
+            if ( my @events = $fs_monitor->read_events ) {
+                $self->_process_events(@events);
+            }
+        };
+        push @watchers, $w;
+
+    }
+
+    $self->_fs_monitor( \@fs_monitors );
     $self->_watcher( \@watchers );
     return 1;
 }
