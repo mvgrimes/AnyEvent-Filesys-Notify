@@ -274,9 +274,9 @@ Specifies the time in fractional seconds between file system checks for
 the L<AnyEvent::Filesys::Notify::Role::Fallback> implementation.
 
 Specifies the latency for L<Mac::FSEvents> for the
-C<AnyEvent::Filesys::Notify::Role::Mac> implementation.
+C<AnyEvent::Filesys::Notify::Role::FSEvents> implementation.
 
-Ignored for the C<AnyEvent::Filesys::Notify::Role::Linux> implementation.
+Ignored for the C<AnyEvent::Filesys::Notify::Role::Inotify2> implementation.
 
 =item filter
 
