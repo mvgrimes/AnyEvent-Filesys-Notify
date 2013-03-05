@@ -20,7 +20,7 @@ sub _init {
         $kqueue->EV_SET(
             fileno($fh),
             EVFILT_VNODE,
-            EV_ADD | EV_ENABLE,
+            EV_ADD | EV_ENABLE | EV_CLEAR,
             NOTE_DELETE | NOTE_WRITE | NOTE_EXTEND | NOTE_ATTRIB |
             NOTE_LINK | NOTE_RENAME | NOTE_REVOKE,
         );
