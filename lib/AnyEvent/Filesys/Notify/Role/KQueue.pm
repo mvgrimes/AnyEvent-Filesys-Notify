@@ -7,7 +7,9 @@ use namespace::autoclean;
 use AnyEvent;
 use IO::KQueue;
 use Carp;
-use Try::Tiny;
+
+# Arbitrary limit on open filehandles before issuing a warning
+our $WARN_FILEHANDLE_LIMIT = 50;
 
 sub _init {
     my $self = shift;
@@ -30,13 +32,13 @@ sub _init {
     # Now use AE to watch the KQueue
     my $w;
     $w = AE::io $$kqueue, 0, sub {
-        warn "# event\n";
         if ( my @events = $kqueue->kevent ) {
             $self->_process_events(@events);
         }
     };
     $self->_watcher( { fhs => \@fhs, w => $w } );
 
+    $self->_check_filehandle_count;
     return 1;
 }
 
@@ -55,13 +57,20 @@ around '_process_events' => sub {
 
     }
 
+    $self->_check_filehandle_count;
     return $events;
 };
 
 sub _watch {
     my ( $self, $path ) = @_;
 
-    open my $fh, '<', $path or croak "Can't open file ($path): $!";
+    open my $fh, '<', $path or do {
+        warn
+          "KQueue requires a filehandle for each watched file and directory.\n"
+          . "You have exceeded the number of filehandles permitted by the OS.\n"
+          if $! =~ /^Too many open files/;
+        croak "Can't open file ($path): $!";
+    };
 
     $self->_fs_monitor->EV_SET(
         fileno($fh),
@@ -72,6 +81,22 @@ sub _watch {
     );
 
     return $fh;
+}
+
+sub _check_filehandle_count {
+    my ($self) = @_;
+
+    my $count = $self->_watcher_count;
+    carp "KQueue requires a filehandle for each watched file and directory.\n"
+      . "You currently have $count filehandles for this AnyEvent::Filesys::Notify object.\n"
+      . "The use of the KQueue backend is not recommended."
+      if $count > $WARN_FILEHANDLE_LIMIT;
+}
+
+sub _watcher_count {
+    my ($self) = @_;
+    my $fhs = $self->_watcher->{fhs};
+    return scalar @$fhs;
 }
 
 1;

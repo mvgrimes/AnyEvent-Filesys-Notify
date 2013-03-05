@@ -319,15 +319,25 @@ not require either L<Linux::INotify2> nor L<Mac::FSEvents>. Optional.
 
 =head1 WATCHER IMPLEMENTATIONS
 
-=head2 Linux
+=head2 INotify2 (Linux)
 
 Uses L<Linux::INotify2> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
 watcher to monitor the C<$inotify-E<gt>fileno> filehandle.
 
-=head2 Mac
+=head2 FSEvents (Mac)
 
 Uses L<Mac::FSEvents> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
 watcher to monitor the C<$fsevent-E<gt>watch> filehandle.
+
+=head2 KQueue (FreeBSD/Mac)
+
+Uses L<IO::KQueue> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
+watcher to monitor the C<IO::KQueue> object.
+
+B<WARNING> - L<IO::KQueue> and the C<kqueue()> system call require an open
+filehandle for every directory and file that is being watched. This makes
+it impossible to watch large directory structures (and inefficient to watch
+moderately sized directories). The use of the KQueue backend is discouraged.
 
 =head2 Fallback
 
