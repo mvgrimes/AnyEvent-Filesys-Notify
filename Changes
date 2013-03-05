@@ -1,5 +1,19 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.22 - Tue Mar  5 14:15:44 EST 2013
+    This is an important release for KQueue users. Prior versions had several
+    bugs in the KQueue backend. As a result, KQueue was effectively polling
+    the filesystem with no delay. KQueue has a serious limitation which makes
+    it impractical for monitoring medium to large sets of files (namely,
+    you need an open filehandle for each directory AND file that you are 
+    monitoring). The use of the KQueue backend is discouraged.
+
+    - Fixes KQueue backend bug which causes CPU usage to peg at 100%
+      (thank to gdxhsw++ for the bug report and patch)
+    - Updates the documentation and issue warnings for KQueue filehandles
+    - Fixes errors in documentation
+    - Adds namespace::autoclean to the Event object
+
 0.21 - Mon Feb  4 15:52:47 EST 2013
     Converts from File::Find::Rule to Path::Interator::Rule
     - Should speed things up marginally.

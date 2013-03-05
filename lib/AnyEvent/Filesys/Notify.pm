@@ -12,7 +12,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -218,7 +218,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 

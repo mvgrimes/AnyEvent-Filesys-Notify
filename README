@@ -3,7 +3,7 @@ NAME
     files/directories for changes
 
 VERSION
-    version 0.21
+    version 0.22
 
 SYNOPSIS
         use AnyEvent::Filesys::Notify;
@@ -51,9 +51,9 @@ METHODS
         for the AnyEvent::Filesys::Notify::Role::Fallback implementation.
 
         Specifies the latency for Mac::FSEvents for the
-        "AnyEvent::Filesys::Notify::Role::Mac" implementation.
+        "AnyEvent::Filesys::Notify::Role::FSEvents" implementation.
 
-        Ignored for the "AnyEvent::Filesys::Notify::Role::Linux"
+        Ignored for the "AnyEvent::Filesys::Notify::Role::Inotify2"
         implementation.
 
     filter
@@ -92,13 +92,23 @@ METHODS
         nor Mac::FSEvents. Optional.
 
 WATCHER IMPLEMENTATIONS
-  Linux
+  INotify2 (Linux)
     Uses Linux::INotify2 to monitor directories. Sets up an "AnyEvent->io"
     watcher to monitor the "$inotify->fileno" filehandle.
 
-  Mac
+  FSEvents (Mac)
     Uses Mac::FSEvents to monitor directories. Sets up an "AnyEvent->io"
     watcher to monitor the "$fsevent->watch" filehandle.
+
+  KQueue (FreeBSD/Mac)
+    Uses IO::KQueue to monitor directories. Sets up an "AnyEvent->io"
+    watcher to monitor the "IO::KQueue" object.
+
+    WARNING - IO::KQueue and the "kqueue()" system call require an open
+    filehandle for every directory and file that is being watched. This
+    makes it impossible to watch large directory structures (and inefficient
+    to watch moderately sized directories). The use of the KQueue backend is
+    discouraged.
 
   Fallback
     A simple scan of the watched directories at regular intervals. Sets up
