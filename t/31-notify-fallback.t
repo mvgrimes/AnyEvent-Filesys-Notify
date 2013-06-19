@@ -1,4 +1,4 @@
-use Test::More tests => 9;
+use Test::More tests => 11;
 
 use strict;
 use warnings;
@@ -13,13 +13,14 @@ use AnyEvent::Impl::Perl;
 
 create_test_files(qw(one/1));
 create_test_files(qw(two/1));
+create_test_files(qw(three));
 
 my $cv;
 my @expected = ();
 
 my $n = AnyEvent::Filesys::Notify->new(
     dirs => [
-        File::Spec->catfile( $dir, 'one' ), File::Spec->catfile( $dir, 'two' )
+        File::Spec->catfile( $dir, 'one' ), File::Spec->catfile( $dir, 'two' ), File::Spec->catfile( $dir, 'three' ),
     ],
     interval => 0.5,
     filter   => sub { shift !~ qr/ignoreme/ },
@@ -63,6 +64,16 @@ $cv->recv;
 
 @expected = qw(deleted created);
 move_test_files( 'one/3' => 'one/5' );
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+@expected = qw(modified);
+create_test_files(qw(three));
+$cv = AnyEvent->condvar;
+$cv->recv;
+
+@expected = qw(deleted);
+move_test_files( 'three' => 'three_1' );
 $cv = AnyEvent->condvar;
 $cv->recv;
 
