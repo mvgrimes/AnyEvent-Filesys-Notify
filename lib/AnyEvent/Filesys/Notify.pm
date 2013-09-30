@@ -13,7 +13,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -217,7 +217,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 =head1 VERSION
 
-version 0.21
+version 0.22
 
 =head1 SYNOPSIS
 
@@ -273,9 +273,9 @@ Specifies the time in fractional seconds between file system checks for
 the L<AnyEvent::Filesys::Notify::Role::Fallback> implementation.
 
 Specifies the latency for L<Mac::FSEvents> for the
-C<AnyEvent::Filesys::Notify::Role::Mac> implementation.
+C<AnyEvent::Filesys::Notify::Role::FSEvents> implementation.
 
-Ignored for the C<AnyEvent::Filesys::Notify::Role::Linux> implementation.
+Ignored for the C<AnyEvent::Filesys::Notify::Role::Inotify2> implementation.
 
 =item filter
 
@@ -318,15 +318,25 @@ not require either L<Linux::INotify2> nor L<Mac::FSEvents>. Optional.
 
 =head1 WATCHER IMPLEMENTATIONS
 
-=head2 Linux
+=head2 INotify2 (Linux)
 
 Uses L<Linux::INotify2> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
 watcher to monitor the C<$inotify-E<gt>fileno> filehandle.
 
-=head2 Mac
+=head2 FSEvents (Mac)
 
 Uses L<Mac::FSEvents> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
 watcher to monitor the C<$fsevent-E<gt>watch> filehandle.
+
+=head2 KQueue (FreeBSD/Mac)
+
+Uses L<IO::KQueue> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
+watcher to monitor the C<IO::KQueue> object.
+
+B<WARNING> - L<IO::KQueue> and the C<kqueue()> system call require an open
+filehandle for every directory and file that is being watched. This makes
+it impossible to watch large directory structures (and inefficient to watch
+moderately sized directories). The use of the KQueue backend is discouraged.
 
 =head2 Fallback
 

@@ -4,6 +4,10 @@ my $build = Module::Build->new(
     license       => 'perl',
     create_readme => 1,
 
+    configure_requires => {
+        'Module::Build'         => '0.4004',
+    },
+
     requires => {
         'Moo'                          => 0,
         'MooX::late'                   => 0,
@@ -19,7 +23,7 @@ my $build = Module::Build->new(
         ( $^O eq 'freebsd' ? ( 'IO::KQueue'      => 0 ) : () ),
     },
 
-    build_requires => {
+    test_requires => {
         'Test::More'            => 0.87,
         'Test::Exception'       => 0,
         'Test::Without::Module' => 0,
