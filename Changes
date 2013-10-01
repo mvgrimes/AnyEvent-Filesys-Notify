@@ -1,5 +1,18 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.23_10 - Mon Sep 30 20:06:50 EDT 2013
+    EXPERIMENTAL DEVELOPERS RELEASE
+
+    Attempts to convert from Moose to Moo for our OO infrastructure. We
+    don't need much of Moose's power, so let's take advantage of Moo's speed.
+
+    - Adds version requirements to the prereqs. Earlier version of some of
+      the prereq seemed to produce an unstable result. Current versions seem
+      fine.
+    - Fixes Changes file to adhere to CPAN::Changes spec
+    - Replaces namespace::autoclean with namespace::sweep as
+      namespace::autoclean relies on Class::MOP
+
 0.22 - Tue Mar  5 14:15:44 EST 2013
     This is an important release for KQueue users. Prior versions had several
     bugs in the KQueue backend. As a result, KQueue was effectively polling

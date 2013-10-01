@@ -32,7 +32,7 @@ AnyEvent::Filesys::Notify::Event - Object to report changes in the monitored fil
 
 =head1 VERSION
 
-version 0.22
+version 0.23_10
 
 =head1 SYNOPSIS
 
