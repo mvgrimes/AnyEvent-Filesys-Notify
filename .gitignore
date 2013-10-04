@@ -2,7 +2,7 @@
 .build
 
 META.yml
-META.json
+!META.json
 MYMETA.yml
 MYMETA.json
 blib/
@@ -19,6 +19,7 @@ Changes.bak
 t/data
 nytprof*
 .local-v*
+README
 
 # podweaver backups
 *.pm.bak
