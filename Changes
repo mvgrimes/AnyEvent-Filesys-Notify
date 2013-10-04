@@ -1,5 +1,10 @@
 Changes for AnyEvent::Filesys::Notify
 
+0.24 - Fri Oct  4 11:44:42 EDT 2013
+    Makes an official release of after converting to Moo. CPANTesters didn't
+    seem to have any issues with the conversion. Hopefully this change will
+    be seemless for users.
+
 0.23_10 - Mon Sep 30 20:06:50 EDT 2013
     EXPERIMENTAL DEVELOPERS RELEASE
 
