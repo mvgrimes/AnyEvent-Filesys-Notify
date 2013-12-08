@@ -20,7 +20,7 @@ sub _init {
     # Need to add all the subdirs to the watch list, this will catch
     # modifications to files too.
     my $old_fs = $self->_old_fs;
-    my @dirs = grep { $old_fs->{$_}->{is_dir} } keys %$old_fs;
+    my @dirs = keys %$old_fs;
 
     # weaken $self; # Attempt to address RT#57104, but alas...
 
