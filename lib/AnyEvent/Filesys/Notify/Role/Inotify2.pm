@@ -61,7 +61,7 @@ override '_process_events' => sub {
     my ( $self, @raw_events ) = @_;
     my @events = ();
 
-    if ( $self->parse_raw ) {
+    if ( $self->parse_events ) {
         for my $e (@raw_events) {
             my $type = undef;
             $type = 'modified' if ( $e->mask & ( IN_MODIFY | IN_ATTRIB ) );
