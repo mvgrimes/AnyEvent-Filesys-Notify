@@ -42,11 +42,8 @@ SKIP: {
 diag "This might take a few seconds to run...";
 
 # ls: one/1 one/sub/1 +one/sub/2 two/1
-received_events(
-    sub { create_test_files(qw(one/sub/2)) },
-    'create a file',
-    qw(created)
-);
+received_events( sub { create_test_files(qw(one/sub/2)) },
+    'create a file', qw(created) );
 
 # ls: one/1 +one/2 one/sub/1 one/sub/2 two/1 +two/sub/2
 received_events(
@@ -60,18 +57,15 @@ received_events(
     sub { create_test_files(qw(one/1)) },
     'modify existing file',
     qw(modified modified)
-);                          # XXXX: modified twice?
+);                         # XXXX: modified twice?
 
 # ls: one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub -two/sub/2
 received_events( sub { delete_test_files(qw(two/sub/2)) },
     'deletes a file', qw(deleted) );
 
 # ls: one/1 one/2 +one/ignoreme +one/3 one/sub/1 one/sub/2 two/1 two/sub
-received_events(
-    sub { create_test_files(qw(one/ignoreme one/3)) },
-    'creates two files one should be ignored',
-    qw(created)
-);
+received_events( sub { create_test_files(qw(one/ignoreme one/3)) },
+    'creates two files one should be ignored', qw(created) );
 
 # ls: one/1 one/2 one/ignoreme -one/3 +one/5 one/sub/1 one/sub/2 two/1 two/sub
 received_events( sub { move_test_files( 'one/3' => 'one/5' ) },

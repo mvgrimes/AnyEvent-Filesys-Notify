@@ -336,7 +336,7 @@ for write, and once when modified). B<Also, the Inotify2 backend might miss the
 creation of files in a new sub-directory. This is due to the fact that Inotify2
 doesn't automatically watch the sub-directory, we have to catch the
 sub-directory create event and add the sub-directory to the list of watched
-directories.
+directories.>
 
 =back
 
