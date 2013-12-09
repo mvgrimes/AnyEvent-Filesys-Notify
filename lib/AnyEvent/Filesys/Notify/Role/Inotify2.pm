@@ -4,6 +4,7 @@ package AnyEvent::Filesys::Notify::Role::Inotify2;
 
 use Moo::Role;
 use MooX::late;
+use MooX::Override -role;
 use namespace::sweep;
 use AnyEvent;
 use Linux::Inotify2;
