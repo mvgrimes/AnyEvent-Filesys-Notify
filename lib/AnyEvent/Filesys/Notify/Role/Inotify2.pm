@@ -8,6 +8,7 @@ use namespace::sweep;
 use AnyEvent;
 use Linux::Inotify2;
 use Carp;
+use Path::Iterator::Rule;
 
 # use Scalar::Util qw(weaken);  # Attempt to address RT#57104, but alas...
 
@@ -73,6 +74,24 @@ sub _parse_events {
                 type   => $type,
                 is_dir => !! $e->IN_ISDIR,
             ) ) if $type;
+
+        # New directories are not automatically watched, we will add it to the
+        # list of watched directories in `around '_process_events'` but in
+        # the meantime, we will miss any newly created files in the subdir
+        if ( $e->IN_ISDIR and $type eq 'created' ) {
+            my $rule = Path::Iterator::Rule->new;
+            my $next = $rule->iter( $e->fullname );
+            while ( my $file = $next->() ) {
+                next if $file eq $e->fullname;
+                push @events,
+                  AnyEvent::Filesys::Notify::Event->new(
+                    path   => $file,
+                    type   => 'created',
+                    is_dir => -d $file,
+                  );
+            }
+
+        }
     }
 
     return @events;

@@ -332,11 +332,7 @@ In backends that support it (currently INotify2), parse the events instead of
 rescanning file system for changed C<stat()> information. Note, that this might
 cause slight changes in behavior. In particular, the Inotify2 backend will
 generate an additional 'modified' event when a file changes (once when opened
-for write, and once when modified). B<Also, the Inotify2 backend might miss the
-creation of files in a new sub-directory. This is due to the fact that Inotify2
-doesn't automatically watch the sub-directory, we have to catch the
-sub-directory create event and add the sub-directory to the list of watched
-directories.>
+for write, and once when modified).
 
 =back
 

@@ -49,7 +49,7 @@ received_events( sub { create_test_files(qw(one/sub/2)) },
 received_events(
     sub { create_test_files(qw(one/2 two/sub/2)) },
     'create file in new subdir',
-    qw(created created)    # created ) # XXXX: Doesn't pick up sub/2
+    qw(created created created)
 );
 
 # ls: ~one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub/2
@@ -57,7 +57,7 @@ received_events(
     sub { create_test_files(qw(one/1)) },
     'modify existing file',
     qw(modified modified)
-);                         # XXXX: modified twice?
+);    # XXXX: modified twice?
 
 # ls: one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub -two/sub/2
 received_events( sub { delete_test_files(qw(two/sub/2)) },
@@ -79,14 +79,14 @@ SKIP: {
         sub { modify_attrs_on_test_files(qw(two/1 two/sub)) },
         'modify attributes',
         qw(modified modified modified)
-    );    # XXXX: two/swub receiveds modified twice
+    );    # XXXX: two/sub receives modified twice
 
 }
 
 # ls: one/1 one/2 one/ignoreme +one/onlyme +one/4 one/5 one/sub/1 one/sub/2 two/1 two/sub
 $n->filter(qr/onlyme/);
 received_events( sub { create_test_files(qw(one/onlyme one/4)) },
-    'filter test', qw(created ) );
+    'filter test', qw(created) );
 
 ok( 1, '... arrived' );
 
