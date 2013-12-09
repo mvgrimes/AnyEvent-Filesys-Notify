@@ -45,14 +45,42 @@ sub _init {
     return 1;
 }
 
-# Need to add newly created sub-dirs to the watch list.
-# This is done after filtering. So entire dirs can be ignored efficiently;
-around '_process_events' => sub {
-    my ( $orig, $self, @e ) = @_;
+# Override this Notify.pm method, which does very inefficient things to
+# accomodate for other platforms than Linux
+#
+# There are small changes in behavior compared to the parent code:
+#
+# 1.: `touch test`: causes an additional "modified" event after the "created"
+#
+# 2.: `mv test2 test`: if test exists before, event for test would be "modified"
+#                      in parent code, but is "created" here
+#
+# Also, add newly created sub-dirs to the watch list after filtering.
+override '_process_events' => sub {
+    my ( $self, @raw_events ) = @_;
+    my @events = ();
 
-    my $events = $self->$orig(@e);
+    if ( $self->parse_raw ) {
+        for my $e (@raw_events) {
+            my $type = undef;
+            $type = 'modified' if ( $e->mask & ( IN_MODIFY | IN_ATTRIB ) );
+            $type = 'deleted'  if ( $e->mask & ( IN_DELETE | IN_DELETE_SELF |
+                    IN_MOVED_FROM | IN_MOVE_SELF ) );
+            $type = 'created'  if ( $e->mask & ( IN_CREATE | IN_MOVED_TO ) );
+            push ( @events,
+              AnyEvent::Filesys::Notify::Event->new(
+                path   => $e->fullname,
+                type   => $type,
+                is_dir => $e->IN_ISDIR,
+              ) ) if $type;
+        }
+        @events = $self->_apply_filter( @events );
+        $self->cb->(@events) if @events;
+    } else {
+        @events = @{ super() };
+    }
 
-    for my $event (@$events) {
+    for my $event (@events) {
         next unless $event->is_dir && $event->is_created;
 
         $self->_fs_monitor->watch(
@@ -63,41 +91,8 @@ around '_process_events' => sub {
 
     }
 
-    return $events;
-};
-
-# Override this Notify.pm method, which does very inefficient things to
-# accomodate for other platforms than Linux
-#
-# There are small changes in behavior compared to the parent code:
-#
-# 1.: `touch test`: causes an additional "modified" event after the "created"
-#
-# 2.: `mv test2 test`: if test exists before, event for test would be "modified"
-#                      in parent code, but is "created" here
-sub _process_events {
-    my ( $self, @raw_events ) = @_;
-    my @events = ();
-
-    for my $e (@raw_events) {
-        my $type = undef;
-        $type = 'modified' if ( $e->IN_MODIFY or $e->IN_ATTRIB );
-        $type = 'deleted'  if ( $e->IN_DELETE or $e->IN_DELETE_SELF or
-            $e->IN_MOVED_FROM or $e->IN_MOVE_SELF );
-        $type = 'created'  if ( $e->IN_CREATE or $e->IN_MOVED_TO );
-        push ( @events,
-          AnyEvent::Filesys::Notify::Event->new(
-            path   => $e->fullname,
-            type   => $type,
-            is_dir => $e->IN_ISDIR,
-          ) ) if $type;
-    }
-
-    @events = $self->_apply_filter( @events );
-    $self->cb->(@events) if @events;
-
     return \@events;
-}
+};
 
 1;
 

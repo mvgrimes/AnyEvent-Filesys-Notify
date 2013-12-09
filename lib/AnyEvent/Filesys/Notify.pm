@@ -22,6 +22,7 @@ has interval    => ( is => 'ro', isa => 'Num',           default  => 2 );
 has no_external => ( is => 'ro', isa => 'Bool',          default  => 0 );
 has backend     => ( is => 'ro', isa => 'Str',           default  => '' );
 has filter      => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
+has parse_raw   => ( is => 'rw', isa => 'Bool',          default => 0 );
 has _fs_monitor => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
@@ -313,6 +314,15 @@ This is retained for backward compatibility. Using C<backend => 'Fallback'>
 is preferred. Force the use of the L</Fallback> watcher implementation. This is
 not encouraged as the L</Fallback> implement is very inefficient, but it does
 not require either L<Linux::INotify2> nor L<Mac::FSEvents>. Optional.
+
+=item parse_raw
+
+    parse_raw => 1,
+
+In backends that support it (currently INotify2), parse the raw events instead
+of searching for changed stat() information. Note, that this might cause slight
+changes in behavior. E.g. the Inotify2 backend will generate an additional
+'modified' event for newly created empty files.
 
 =back
 
