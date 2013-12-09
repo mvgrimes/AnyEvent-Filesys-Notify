@@ -4,7 +4,6 @@ package AnyEvent::Filesys::Notify::Role::Inotify2;
 
 use Moo::Role;
 use MooX::late;
-use MooX::Override -role;
 use namespace::sweep;
 use AnyEvent;
 use Linux::Inotify2;
@@ -46,42 +45,47 @@ sub _init {
     return 1;
 }
 
-# Override this Notify.pm method, which does very inefficient things to
-# accomodate for other platforms than Linux
-#
+# Parse the events returned by Inotify2 instead of rescanning the files.
 # There are small changes in behavior compared to the parent code:
 #
-# 1.: `touch test`: causes an additional "modified" event after the "created"
+# 1. `touch test` causes an additional "modified" event after the "created"
+# 2. `mv test2 test` if test exists before, event for test would be "modified"
+#     in parent code, but is "created" here
 #
-# 2.: `mv test2 test`: if test exists before, event for test would be "modified"
-#                      in parent code, but is "created" here
-#
-# Also, add newly created sub-dirs to the watch list after filtering.
-override '_process_events' => sub {
+# Because of these differences, we default to the original behavior unless the
+# parse_events flag is true.
+sub _parse_events {
     my ( $self, @raw_events ) = @_;
     my @events = ();
 
-    if ( $self->parse_events ) {
-        for my $e (@raw_events) {
-            my $type = undef;
-            $type = 'modified' if ( $e->mask & ( IN_MODIFY | IN_ATTRIB ) );
-            $type = 'deleted'  if ( $e->mask & ( IN_DELETE | IN_DELETE_SELF |
-                    IN_MOVED_FROM | IN_MOVE_SELF ) );
-            $type = 'created'  if ( $e->mask & ( IN_CREATE | IN_MOVED_TO ) );
-            push ( @events,
-              AnyEvent::Filesys::Notify::Event->new(
+    for my $e (@raw_events) {
+        my $type = undef;
+
+        $type = 'modified' if ( $e->mask & ( IN_MODIFY | IN_ATTRIB ) );
+        $type = 'deleted'  if ( $e->mask &
+            ( IN_DELETE | IN_DELETE_SELF | IN_MOVED_FROM | IN_MOVE_SELF ) );
+        $type = 'created'  if ( $e->mask & ( IN_CREATE | IN_MOVED_TO ) );
+
+        push(
+            @events,
+            AnyEvent::Filesys::Notify::Event->new(
                 path   => $e->fullname,
                 type   => $type,
-                is_dir => $e->IN_ISDIR,
-              ) ) if $type;
-        }
-        @events = $self->_apply_filter( @events );
-        $self->cb->(@events) if @events;
-    } else {
-        @events = @{ super() };
+                is_dir => !! $e->IN_ISDIR,
+            ) ) if $type;
     }
 
-    for my $event (@events) {
+    return @events;
+}
+
+# Need to add newly created sub-dirs to the watch list.
+# This is done after filtering. So entire dirs can be ignored efficiently;
+around '_process_events' => sub {
+    my ( $orig, $self, @e ) = @_;
+
+    my $events = $self->$orig(@e);
+
+    for my $event (@$events) {
         next unless $event->is_dir && $event->is_created;
 
         $self->_fs_monitor->watch(
@@ -92,7 +96,7 @@ override '_process_events' => sub {
 
     }
 
-    return \@events;
+    return $events;
 };
 
 1;

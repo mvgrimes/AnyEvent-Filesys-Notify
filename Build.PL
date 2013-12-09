@@ -11,7 +11,6 @@ my $build = Module::Build->new(
     requires => {
         'Moo'                          => '1.003001',
         'MooX::late'                   => '0.014',
-        'MooX::Override'               => '0.001',
         'MooX::Types::MooseLike::Base' => '0.25',
         'AnyEvent'                     => '7.05',
         'Path::Iterator::Rule'         => '1.005',
