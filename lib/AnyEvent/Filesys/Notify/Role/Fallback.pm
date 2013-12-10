@@ -34,7 +34,7 @@ AnyEvent::Filesys::Notify::Role::Fallback - Fallback method of file watching (ch
 
 =head1 VERSION
 
-version 0.24
+version 1.10
 
 =head1 AUTHOR
 

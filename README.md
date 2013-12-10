@@ -4,7 +4,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 # VERSION
 
-version 0.24
+version 1.10
 
 # SYNOPSIS
 
@@ -18,6 +18,7 @@ version 0.24
             my (@events) = @_;
             # ... process @events ...
         },
+        parse_events => 1,  # Improves efficiency on certain platforms
     );
 
     # enter an event loop, see AnyEvent documentation
@@ -98,6 +99,16 @@ Arguments for new are:
     is preferred. Force the use of the ["Fallback"](#Fallback) watcher implementation. This is
     not encouraged as the ["Fallback"](#Fallback) implement is very inefficient, but it does
     not require either [Linux::INotify2](http://search.cpan.org/perldoc?Linux::INotify2) nor [Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents). Optional.
+
+- parse\_events
+
+        parse_events => 1,
+
+    In backends that support it (currently INotify2), parse the events instead of
+    rescanning file system for changed `stat()` information. Note, that this might
+    cause slight changes in behavior. In particular, the Inotify2 backend will
+    generate an additional 'modified' event when a file changes (once when opened
+    for write, and once when modified).
 
 # WATCHER IMPLEMENTATIONS
 
