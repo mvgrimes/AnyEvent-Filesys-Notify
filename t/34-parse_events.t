@@ -1,4 +1,4 @@
-use Test::More tests => 11;
+use Test::More tests => 10;
 
 use strict;
 use warnings;
@@ -25,20 +25,6 @@ my $n = AnyEvent::Filesys::Notify->new(
 );
 isa_ok( $n, 'AnyEvent::Filesys::Notify' );
 
-SKIP: {
-    skip "not sure which os we are on", 1
-      unless $^O =~ /linux|darwin|freebsd/;
-    ok( $n->does('AnyEvent::Filesys::Notify::Role::Inotify2'),
-        '... with the linux role' )
-      if $^O eq 'linux';
-    ok( $n->does('AnyEvent::Filesys::Notify::Role::FSEvents'),
-        '... with the mac role' )
-      if $^O eq 'darwin';
-    ok( $n->does('AnyEvent::Filesys::Notify::Role::KQueue'),
-        '... with the freebsd role' )
-      if $^O eq 'freebsd';
-}
-
 diag "This might take a few seconds to run...";
 
 # ls: one/1 one/sub/1 +one/sub/2 two/1
@@ -53,11 +39,15 @@ received_events(
 );
 
 # ls: ~one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub/2
-received_events(
-    sub { create_test_files(qw(one/1)) },
-    'modify existing file',
-    qw(modified modified)
-);    # XXXX: modified twice?
+# Inotify2 generates two modified events when a file is modified
+{
+    my @expected =
+      $n->does('AnyEvent::Filesys::Notify::Role::Inotify2')
+      ? qw(modified modified)
+      : qw(modified);
+    received_events( sub { create_test_files(qw(one/1)) },
+        'modify existing file', @expected );
+}
 
 # ls: one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub -two/sub/2
 received_events( sub { delete_test_files(qw(two/sub/2)) },
@@ -75,11 +65,13 @@ SKIP: {
     skip "skip attr mods on Win32", 1 if $^O eq 'MSWin32';
 
     # ls: one/1 one/2 one/ignoreme one/5 one/sub/1 one/sub/2 ~two/1 ~two/sub
-    received_events(
-        sub { modify_attrs_on_test_files(qw(two/1 two/sub)) },
-        'modify attributes',
-        qw(modified modified modified)
-    );    # XXXX: two/sub receives modified twice
+    # Inotify2 generates an extra modified event when attributes changed
+    my @expected =
+      $n->does('AnyEvent::Filesys::Notify::Role::Inotify2')
+      ? qw(modified modified modified)
+      : qw(modified modified);
+    received_events( sub { modify_attrs_on_test_files(qw(two/1 two/sub)) },
+        'modify attributes', @expected );
 
 }
 
