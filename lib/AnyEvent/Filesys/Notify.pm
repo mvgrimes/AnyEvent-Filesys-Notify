@@ -252,7 +252,7 @@ This module provides a cross platform interface to monitor files and
 directories within an L<AnyEvent> event loop. The heavy lifting is done by
 L<Linux::INotify2> or L<Mac::FSEvents> on their respective O/S. A fallback
 which scans the directories at regular intervals is include for other systems.
-See L</IMPLEMENTATIONS> for more on the backends.
+See L</WATCHER IMPLEMENTATIONS> for more on the backends.
 
 Events are passed to the callback (specified as a CodeRef to C<cb> in the
 constructor) in the form of L<AnyEvent::Filesys::Notify::Event>s.
