@@ -1,5 +1,9 @@
 Changes for AnyEvent::Filesys::Notify
 
+1.11 - Wed Dec 11 08:59:54 EST 2013
+    Uses IO::KQueue on all freebsd-like systems (ie, gnufreebsd).
+    Fixes minor POD linking problem.
+
 1.10 - Tue Dec 10 11:42:06 EST 2013
     If the parse_events flag is set, use events from Inotify2 instead of
     rescanning all files (RT#82847).  Thanks to Carsten Wolff

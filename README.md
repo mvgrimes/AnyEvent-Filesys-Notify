@@ -4,7 +4,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 # VERSION
 
-version 1.10
+version 1.11
 
 # SYNOPSIS
 
@@ -27,13 +27,13 @@ version 1.10
 # DESCRIPTION
 
 This module provides a cross platform interface to monitor files and
-directories within an [AnyEvent](http://search.cpan.org/perldoc?AnyEvent) event loop. The heavy lifting is done by
-[Linux::INotify2](http://search.cpan.org/perldoc?Linux::INotify2) or [Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents) on their respective O/S. A fallback
+directories within an [AnyEvent](https://metacpan.org/pod/AnyEvent) event loop. The heavy lifting is done by
+[Linux::INotify2](https://metacpan.org/pod/Linux::INotify2) or [Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents) on their respective O/S. A fallback
 which scans the directories at regular intervals is include for other systems.
-See ["IMPLEMENTATIONS"](#IMPLEMENTATIONS) for more on the backends.
+See ["WATCHER IMPLEMENTATIONS"](#watcher-implementations) for more on the backends.
 
 Events are passed to the callback (specified as a CodeRef to `cb` in the
-constructor) in the form of [AnyEvent::Filesys::Notify::Event](http://search.cpan.org/perldoc?AnyEvent::Filesys::Notify::Event)s.
+constructor) in the form of [AnyEvent::Filesys::Notify::Event](https://metacpan.org/pod/AnyEvent::Filesys::Notify::Event)s.
 
 # METHODS
 
@@ -56,9 +56,9 @@ Arguments for new are:
         interval => 1.5,   # seconds
 
     Specifies the time in fractional seconds between file system checks for
-    the [AnyEvent::Filesys::Notify::Role::Fallback](http://search.cpan.org/perldoc?AnyEvent::Filesys::Notify::Role::Fallback) implementation.
+    the [AnyEvent::Filesys::Notify::Role::Fallback](https://metacpan.org/pod/AnyEvent::Filesys::Notify::Role::Fallback) implementation.
 
-    Specifies the latency for [Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents) for the
+    Specifies the latency for [Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents) for the
     `AnyEvent::Filesys::Notify::Role::FSEvents` implementation.
 
     Ignored for the `AnyEvent::Filesys::Notify::Role::Inotify2` implementation.
@@ -79,7 +79,7 @@ Arguments for new are:
 
     A CodeRef that is called when a modification to the monitored directory(ies) is
     detected. The callback is passed a list of
-    [AnyEvent::Filesys::Notify::Event](http://search.cpan.org/perldoc?AnyEvent::Filesys::Notify::Event)s. Required.
+    [AnyEvent::Filesys::Notify::Event](https://metacpan.org/pod/AnyEvent::Filesys::Notify::Event)s. Required.
 
 - backend
 
@@ -96,9 +96,9 @@ Arguments for new are:
         no_external => 1,
 
     This is retained for backward compatibility. Using `backend =` 'Fallback'>
-    is preferred. Force the use of the ["Fallback"](#Fallback) watcher implementation. This is
-    not encouraged as the ["Fallback"](#Fallback) implement is very inefficient, but it does
-    not require either [Linux::INotify2](http://search.cpan.org/perldoc?Linux::INotify2) nor [Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents). Optional.
+    is preferred. Force the use of the ["Fallback"](#fallback) watcher implementation. This is
+    not encouraged as the ["Fallback"](#fallback) implement is very inefficient, but it does
+    not require either [Linux::INotify2](https://metacpan.org/pod/Linux::INotify2) nor [Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents). Optional.
 
 - parse\_events
 
@@ -114,20 +114,20 @@ Arguments for new are:
 
 ## INotify2 (Linux)
 
-Uses [Linux::INotify2](http://search.cpan.org/perldoc?Linux::INotify2) to monitor directories. Sets up an `AnyEvent->io`
+Uses [Linux::INotify2](https://metacpan.org/pod/Linux::INotify2) to monitor directories. Sets up an `AnyEvent->io`
 watcher to monitor the `$inotify->fileno` filehandle.
 
 ## FSEvents (Mac)
 
-Uses [Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents) to monitor directories. Sets up an `AnyEvent->io`
+Uses [Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents) to monitor directories. Sets up an `AnyEvent->io`
 watcher to monitor the `$fsevent->watch` filehandle.
 
 ## KQueue (FreeBSD/Mac)
 
-Uses [IO::KQueue](http://search.cpan.org/perldoc?IO::KQueue) to monitor directories. Sets up an `AnyEvent->io`
+Uses [IO::KQueue](https://metacpan.org/pod/IO::KQueue) to monitor directories. Sets up an `AnyEvent->io`
 watcher to monitor the `IO::KQueue` object.
 
-__WARNING__ - [IO::KQueue](http://search.cpan.org/perldoc?IO::KQueue) and the `kqueue()` system call require an open
+__WARNING__ - [IO::KQueue](https://metacpan.org/pod/IO::KQueue) and the `kqueue()` system call require an open
 filehandle for every directory and file that is being watched. This makes
 it impossible to watch large directory structures (and inefficient to watch
 moderately sized directories). The use of the KQueue backend is discouraged.
@@ -137,7 +137,7 @@ moderately sized directories). The use of the KQueue backend is discouraged.
 A simple scan of the watched directories at regular intervals. Sets up an
 `AnyEvent->timer` watcher which is executed every `interval` seconds
 (or fractions thereof). `interval` can be specified in the constructor to
-[AnyEvent::Filesys::Notify](http://search.cpan.org/perldoc?AnyEvent::Filesys::Notify) and defaults to 2.0 seconds.
+[AnyEvent::Filesys::Notify](https://metacpan.org/pod/AnyEvent::Filesys::Notify) and defaults to 2.0 seconds.
 
 This is a very inefficient implementation. Use one of the others if possible.
 
@@ -146,18 +146,18 @@ This is a very inefficient implementation. Use one of the others if possible.
 At the time of writing there were several very nice modules that accomplish
 the task of watching files or directories and providing notifications about
 changes. Two of which offer a unified interface that work on any system:
-[Filesys::Notify::Simple](http://search.cpan.org/perldoc?Filesys::Notify::Simple) and [File::ChangeNotify](http://search.cpan.org/perldoc?File::ChangeNotify).
+[Filesys::Notify::Simple](https://metacpan.org/pod/Filesys::Notify::Simple) and [File::ChangeNotify](https://metacpan.org/pod/File::ChangeNotify).
 
-[AnyEvent::Filesys::Notify](http://search.cpan.org/perldoc?AnyEvent::Filesys::Notify) exists because I need a way to simply tie the
+[AnyEvent::Filesys::Notify](https://metacpan.org/pod/AnyEvent::Filesys::Notify) exists because I need a way to simply tie the
 functionality those modules provide into an event framework. Neither of the
 existing modules seem to work with well with an event loop.
-[Filesys::Notify::Simple](http://search.cpan.org/perldoc?Filesys::Notify::Simple) does not supply a non-blocking interface and
-[File::ChangeNotify](http://search.cpan.org/perldoc?File::ChangeNotify) requires you to poll an method for new events. You could
-fork off a process to run [Filesys::Notify::Simple](http://search.cpan.org/perldoc?Filesys::Notify::Simple) and use an event handler
+[Filesys::Notify::Simple](https://metacpan.org/pod/Filesys::Notify::Simple) does not supply a non-blocking interface and
+[File::ChangeNotify](https://metacpan.org/pod/File::ChangeNotify) requires you to poll an method for new events. You could
+fork off a process to run [Filesys::Notify::Simple](https://metacpan.org/pod/Filesys::Notify::Simple) and use an event handler
 to watch for notices from that child, or setup a timer to check
-[File::ChangeNotify](http://search.cpan.org/perldoc?File::ChangeNotify) at regular intervals, but both of those approaches seem
+[File::ChangeNotify](https://metacpan.org/pod/File::ChangeNotify) at regular intervals, but both of those approaches seem
 inefficient or overly complex. Particularly, since the underlying watcher
-implementations ([Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents) and [Linux::INotify2](http://search.cpan.org/perldoc?Linux::INotify2)) provide a filehandle
+implementations ([Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents) and [Linux::INotify2](https://metacpan.org/pod/Linux::INotify2)) provide a filehandle
 that you can use and IO event to watch.
 
 This is not slight against the authors of those modules. Both are well 
@@ -168,10 +168,10 @@ module may fit the bill.
 
 # SEE ALSO
 
-Modules used to implement this module [AnyEvent](http://search.cpan.org/perldoc?AnyEvent), [Mac::FSEvents](http://search.cpan.org/perldoc?Mac::FSEvents),
-[Linux::INotify2](http://search.cpan.org/perldoc?Linux::INotify2), [Moose](http://search.cpan.org/perldoc?Moose).
+Modules used to implement this module [AnyEvent](https://metacpan.org/pod/AnyEvent), [Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents),
+[Linux::INotify2](https://metacpan.org/pod/Linux::INotify2), [Moose](https://metacpan.org/pod/Moose).
 
-Alternatives to this module [Filesys::Notify::Simple](http://search.cpan.org/perldoc?Filesys::Notify::Simple), [File::ChangeNotify](http://search.cpan.org/perldoc?File::ChangeNotify).
+Alternatives to this module [Filesys::Notify::Simple](https://metacpan.org/pod/Filesys::Notify::Simple), [File::ChangeNotify](https://metacpan.org/pod/File::ChangeNotify).
 
 # BUGS
 
