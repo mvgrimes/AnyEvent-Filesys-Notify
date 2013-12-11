@@ -20,7 +20,7 @@ my $build = Module::Build->new(
         'namespace::sweep'             => '0.006',
         ( $^O eq 'linux'   ? ( 'Linux::Inotify2' => '1.22' ) : () ),
         ( $^O eq 'darwin'  ? ( 'Mac::FSEvents'   => '0.10' ) : () ),
-        ( $^O eq 'freebsd' ? ( 'IO::KQueue'      => '0.34' ) : () ),
+        ( $^O =~ /freebsd/ ? ( 'IO::KQueue'      => '0.34' ) : () ),
     },
 
     build_requires => {

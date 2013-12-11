@@ -14,7 +14,7 @@ BEGIN {
 
                 return if m{Inotify2$} and $^O ne 'linux';
                 return if m{FSEvents$} and $^O ne 'darwin';
-                return if m{KQueue$}   and $^O ne 'freebsd';
+                return if m{KQueue$}   and $^O !~ /freebsd/;
 
                 use_ok($_)
                   or die "Couldn't use_ok $_";

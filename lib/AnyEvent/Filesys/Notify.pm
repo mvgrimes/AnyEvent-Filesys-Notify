@@ -200,7 +200,7 @@ sub _load_backend {
               . "Mac::FSEvents or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
-    } elsif ( $^O eq 'freebsd' ) {
+    } elsif ( $^O =~ /freebsd/ ) {
         try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::KQueue" ); }
         catch {
             croak "Unable to load the FreeBSD plugin. You may want to install "

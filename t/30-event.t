@@ -36,7 +36,7 @@ SKIP: {
       if $^O eq 'darwin';
     ok( $n->does('AnyEvent::Filesys::Notify::Role::KQueue'),
         '... with the freebsd role' )
-      if $^O eq 'freebsd';
+      if $^O =~ /freebsd/;
 }
 
 diag "This might take a few seconds to run...";

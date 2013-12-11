@@ -22,7 +22,7 @@ SKIP: {
     skip 'Test for Mac/Linux/FreeBSD only', 1
       unless $^O eq 'linux'
           or $^O eq 'darwin'
-          or $^O eq 'freebsd';
+          or $^O =~ /freebsd/;
 
     throws_ok {
         AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );
