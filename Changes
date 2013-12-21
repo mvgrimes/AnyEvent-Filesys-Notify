@@ -1,5 +1,8 @@
 Changes for AnyEvent::Filesys::Notify
 
+1.12_01 - Sat Dec 21 14:41:53 EST 2013
+    Attempts to use KQueue on any BSD RT#91556
+
 1.11 - Wed Dec 11 08:59:54 EST 2013
     Uses IO::KQueue on all freebsd-like systems (ie, gnufreebsd).
     Fixes minor POD linking problem.

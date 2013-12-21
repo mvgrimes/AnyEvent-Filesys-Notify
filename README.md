@@ -4,7 +4,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 # VERSION
 
-version 1.11
+version 1.12\_01
 
 # SYNOPSIS
 
@@ -84,7 +84,7 @@ Arguments for new are:
 - backend
 
         backend => 'Fallback',
-        backend => 'FreeBSD',
+        backend => 'KQueue',
         backend => '+My::Filesys::Notify::Role::Backend',
 
     Force the use of the specified backend. The backend is assumed to have the
@@ -122,7 +122,7 @@ watcher to monitor the `$inotify->fileno` filehandle.
 Uses [Mac::FSEvents](https://metacpan.org/pod/Mac::FSEvents) to monitor directories. Sets up an `AnyEvent->io`
 watcher to monitor the `$fsevent->watch` filehandle.
 
-## KQueue (FreeBSD/Mac)
+## KQueue (BSD/Mac)
 
 Uses [IO::KQueue](https://metacpan.org/pod/IO::KQueue) to monitor directories. Sets up an `AnyEvent->io`
 watcher to monitor the `IO::KQueue` object.
@@ -178,13 +178,13 @@ Alternatives to this module [Filesys::Notify::Simple](https://metacpan.org/pod/F
 Please report any bugs or suggestions at [http://rt.cpan.org/](http://rt.cpan.org/)
 
 Forcing the `IO::KQueue` backend on a Mac does not seem to work.  The
-`IO::KQueue` backend seems to be working fine on FreeBSD. I don't have the
+`IO::KQueue` backend seems to be working fine on BSD. I don't have the
 experience or time to fix it on a Mac.  I would greatly appreciate any help
 troubleshooting this.
 
 # CONTRIBUTORS
 
-Thanks to Gasol Wu <gasol.wu@gmail.com> who contributed the FreeBSD
+Thanks to Gasol Wu <gasol.wu@gmail.com> who contributed the BSD
 support for IO::KQueue.
 
 # AUTHOR

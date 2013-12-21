@@ -112,7 +112,7 @@ AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed fi
 
 =head1 VERSION
 
-version 1.11
+version 1.12_01
 
 =head1 CONTRIBUTORS
 
