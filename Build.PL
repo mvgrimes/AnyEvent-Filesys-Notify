@@ -5,7 +5,7 @@ my $build = Module::Build->new(
     create_readme => 1,
 
     configure_requires => {
-        'Module::Build'         => '0.4004',
+        'Module::Build' => '0.4004',
     },
 
     requires => {
@@ -18,9 +18,9 @@ my $build = Module::Build->new(
         'Carp'                         => '1.20',
         'Try::Tiny'                    => '0.18',
         'namespace::sweep'             => '0.006',
-        ( $^O eq 'linux'   ? ( 'Linux::Inotify2' => '1.22' ) : () ),
-        ( $^O eq 'darwin'  ? ( 'Mac::FSEvents'   => '0.10' ) : () ),
-        ( $^O =~ /bsd/ ? ( 'IO::KQueue'      => '0.34' ) : () ),
+        ( $^O eq 'linux'  ? ( 'Linux::Inotify2' => '1.22' ) : () ),
+        ( $^O eq 'darwin' ? ( 'Mac::FSEvents'   => '0.10' ) : () ),
+        ( $^O =~ /bsd/    ? ( 'IO::KQueue'      => '0.34' ) : () ),
     },
 
     build_requires => {

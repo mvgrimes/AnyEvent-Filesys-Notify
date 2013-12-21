@@ -21,8 +21,8 @@ ok( !$w->does('AnyEvent::Filesys::Notify::Role::KQueue'),   '... KQueue' );
 SKIP: {
     skip 'Test for Mac/Linux/BSD only', 1
       unless $^O eq 'linux'
-          or $^O eq 'darwin'
-          or $^O =~ /bsd/;
+      or $^O eq 'darwin'
+      or $^O =~ /bsd/;
 
     throws_ok {
         AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );

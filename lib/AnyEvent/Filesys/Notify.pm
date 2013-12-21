@@ -16,14 +16,14 @@ use Try::Tiny;
 our $VERSION = '1.11';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
-has dirs        => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
-has cb          => ( is => 'rw', isa => 'CodeRef',       required => 1 );
-has interval    => ( is => 'ro', isa => 'Num',           default  => 2 );
-has no_external => ( is => 'ro', isa => 'Bool',          default  => 0 );
-has backend     => ( is => 'ro', isa => 'Str',           default  => '' );
-has filter      => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
-has parse_events=> ( is => 'rw', isa => 'Bool',          default => 0 );
-has _fs_monitor => ( is => 'rw', );
+has dirs         => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
+has cb           => ( is => 'rw', isa => 'CodeRef',       required => 1 );
+has interval     => ( is => 'ro', isa => 'Num',           default  => 2 );
+has no_external  => ( is => 'ro', isa => 'Bool',          default  => 0 );
+has backend      => ( is => 'ro', isa => 'Str',           default  => '' );
+has filter       => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
+has parse_events => ( is => 'rw', isa => 'Bool',          default  => 0 );
+has _fs_monitor  => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
 
@@ -46,8 +46,8 @@ sub _process_events {
 
     my @events;
 
-    if( $self->parse_events and $self->can('_parse_events') ){
-        @events = $self->_apply_filter( $self->_parse_events( @raw_events ) );
+    if ( $self->parse_events and $self->can('_parse_events') ) {
+        @events = $self->_apply_filter( $self->_parse_events(@raw_events) );
     } else {
         my $new_fs = _scan_fs( $self->dirs );
         @events = $self->_apply_filter( _diff_fs( $self->_old_fs, $new_fs ) );
@@ -174,7 +174,7 @@ sub _load_backend {
     if ( $self->backend ) {
 
         # Use the AEFN::Role prefix unless the backend starts with a +
-        my $prefix = "${AEFN}::Role::";
+        my $prefix  = "${AEFN}::Role::";
         my $backend = $self->backend;
         $backend = $prefix . $backend unless $backend =~ s{^\+}{};
 
@@ -187,21 +187,29 @@ sub _load_backend {
     } elsif ( $self->no_external ) {
         Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::Fallback" );
     } elsif ( $^O eq 'linux' ) {
-        try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::Inotify2"); }
+        try {
+            Moo::Role->apply_roles_to_object( $self,
+                "${AEFN}::Role::Inotify2" );
+        }
         catch {
             croak "Unable to load the Linux plugin. You may want to install "
               . "Linux::INotify2 or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } elsif ( $^O eq 'darwin' ) {
-        try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::FSEvents" ); }
+        try {
+            Moo::Role->apply_roles_to_object( $self,
+                "${AEFN}::Role::FSEvents" );
+        }
         catch {
             croak "Unable to load the Mac plugin. You may want to install "
               . "Mac::FSEvents or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
     } elsif ( $^O =~ /bsd/ ) {
-        try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::KQueue" ); }
+        try {
+            Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::KQueue" );
+        }
         catch {
             croak "Unable to load the BSD plugin. You may want to install "
               . "IO::KQueue or specify 'no_external' (but that is very "
