@@ -19,10 +19,10 @@ ok( !$w->does('AnyEvent::Filesys::Notify::Role::FSEvents'), '... FSEvents' );
 ok( !$w->does('AnyEvent::Filesys::Notify::Role::KQueue'),   '... KQueue' );
 
 SKIP: {
-    skip 'Test for Mac/Linux/FreeBSD only', 1
+    skip 'Test for Mac/Linux/BSD only', 1
       unless $^O eq 'linux'
           or $^O eq 'darwin'
-          or $^O =~ /freebsd/;
+          or $^O =~ /bsd/;
 
     throws_ok {
         AnyEvent::Filesys::Notify->new( dirs => ['t'], cb => sub { } );

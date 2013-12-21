@@ -31,7 +31,7 @@ subtest 'Try to load the correct backend for this O/S' => sub {
         ok( !$w->does("${AEFN}::Role::KQueue"),   '... KQueue' );
 
     } elsif (
-        $^O =~ /freebsd/ and eval {
+        $^O =~ /bsd/ and eval {
             require IO::KQueue;
             1;
         } )

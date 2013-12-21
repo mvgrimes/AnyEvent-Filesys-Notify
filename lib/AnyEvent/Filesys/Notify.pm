@@ -200,10 +200,10 @@ sub _load_backend {
               . "Mac::FSEvents or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
-    } elsif ( $^O =~ /freebsd/ ) {
+    } elsif ( $^O =~ /bsd/ ) {
         try { Moo::Role->apply_roles_to_object( $self, "${AEFN}::Role::KQueue" ); }
         catch {
-            croak "Unable to load the FreeBSD plugin. You may want to install "
+            croak "Unable to load the BSD plugin. You may want to install "
               . "IO::KQueue or specify 'no_external' (but that is very "
               . "inefficient):\n$_";
         }
@@ -308,7 +308,7 @@ L<AnyEvent::Filesys::Notify::Event>s. Required.
 =item backend
 
     backend => 'Fallback',
-    backend => 'FreeBSD',
+    backend => 'KQueue',
     backend => '+My::Filesys::Notify::Role::Backend',
 
 Force the use of the specified backend. The backend is assumed to have the
@@ -348,7 +348,7 @@ watcher to monitor the C<$inotify-E<gt>fileno> filehandle.
 Uses L<Mac::FSEvents> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
 watcher to monitor the C<$fsevent-E<gt>watch> filehandle.
 
-=head2 KQueue (FreeBSD/Mac)
+=head2 KQueue (BSD/Mac)
 
 Uses L<IO::KQueue> to monitor directories. Sets up an C<AnyEvent-E<gt>io>
 watcher to monitor the C<IO::KQueue> object.
@@ -404,13 +404,13 @@ Alternatives to this module L<Filesys::Notify::Simple>, L<File::ChangeNotify>.
 Please report any bugs or suggestions at L<http://rt.cpan.org/>
 
 Forcing the C<IO::KQueue> backend on a Mac does not seem to work.  The
-C<IO::KQueue> backend seems to be working fine on FreeBSD. I don't have the
+C<IO::KQueue> backend seems to be working fine on BSD. I don't have the
 experience or time to fix it on a Mac.  I would greatly appreciate any help
 troubleshooting this.
 
 =head1 CONTRIBUTORS
 
-Thanks to Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the FreeBSD
+Thanks to Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD
 support for IO::KQueue.
 
 =head1 AUTHOR

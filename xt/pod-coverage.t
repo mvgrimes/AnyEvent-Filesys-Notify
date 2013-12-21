@@ -32,8 +32,8 @@ pod_coverage_ok( $_,
     { trustme => ['BUILD'], coverage_class => 'Pod::Coverage::TrustPod' } )
   for grep {
     not(   ( $^O ne 'linux' && $_ =~ /Linux$/ )
-        or ( $^O ne 'darwin'  && $_ =~ /Mac$/ )
-        or ( $^O ne 'freebsd' && $_ =~ /FreeBSD$/ ) )
+        or ( $^O ne 'darwin' && $_ =~ /Mac$/ )
+        or ( $^O ne 'bsd' && $_ =~ /BSD$/ ) )
   } all_modules();
 
 done_testing;
