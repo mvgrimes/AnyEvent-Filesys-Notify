@@ -130,7 +130,7 @@ AnyEvent::Filesys::Notify::Role::Inotify2 - Use Linux::Inotify2 to watch for cha
 
 =head1 VERSION
 
-version 1.12
+version 1.14
 
 =head1 AUTHOR
 
