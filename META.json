@@ -45,34 +45,9 @@
             "MooX::late" : "0.014",
             "Path::Iterator::Rule" : "1.005",
             "Try::Tiny" : "0.18",
-            "namespace::sweep" : "0.006"
+            "namespace::sweep" : "0.006",
+            "perl" : "5.006"
          }
-      }
-   },
-   "provides" : {
-      "AnyEvent::Filesys::Notify" : {
-         "file" : "lib/AnyEvent/Filesys/Notify.pm",
-         "version" : "1.14"
-      },
-      "AnyEvent::Filesys::Notify::Event" : {
-         "file" : "lib/AnyEvent/Filesys/Notify/Event.pm",
-         "version" : 0
-      },
-      "AnyEvent::Filesys::Notify::Role::FSEvents" : {
-         "file" : "lib/AnyEvent/Filesys/Notify/Role/FSEvents.pm",
-         "version" : 0
-      },
-      "AnyEvent::Filesys::Notify::Role::Fallback" : {
-         "file" : "lib/AnyEvent/Filesys/Notify/Role/Fallback.pm",
-         "version" : 0
-      },
-      "AnyEvent::Filesys::Notify::Role::Inotify2" : {
-         "file" : "lib/AnyEvent/Filesys/Notify/Role/Inotify2.pm",
-         "version" : 0
-      },
-      "AnyEvent::Filesys::Notify::Role::KQueue" : {
-         "file" : "lib/AnyEvent/Filesys/Notify/Role/KQueue.pm",
-         "version" : 0
       }
    },
    "release_status" : "stable",

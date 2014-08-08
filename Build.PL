@@ -9,6 +9,7 @@ my $build = Module::Build->new(
     },
 
     requires => {
+        'perl'                         => '5.006',
         'Moo'                          => '1.003001',
         'MooX::late'                   => '0.014',
         'MooX::Types::MooseLike::Base' => '0.25',
