@@ -1,6 +1,6 @@
 Changes for AnyEvent::Filesys::Notify
 
-1.14 - Fri Aug  8 08:56:14 EDT 2014
+1.15 - Fri Aug 15 20:14:38 EDT 2014
     Adds minimum version of perl to the prereqs
 
 1.12 - Sun Dec 22 14:04:39 EST 2013
