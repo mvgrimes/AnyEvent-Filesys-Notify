@@ -39,7 +39,6 @@
             "AnyEvent" : "7.05",
             "Carp" : "1.20",
             "Cwd" : "3.40",
-            "Mac::FSEvents" : "0.10",
             "Moo" : "1.003001",
             "MooX::Types::MooseLike::Base" : "0.25",
             "MooX::late" : "0.014",
