@@ -19,6 +19,7 @@ Changes.bak
 t/data
 nytprof*
 .local-v*
+local/
 README
 
 # podweaver backups
