@@ -40,14 +40,11 @@ received_events(
 
 # ls: ~one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub/2
 # Inotify2 generates two modified events when a file is modified
-{
-    my @expected =
-      $n->does('AnyEvent::Filesys::Notify::Role::Inotify2')
-      ? qw(modified modified)
-      : qw(modified);
-    received_events( sub { create_test_files(qw(one/1)) },
-        'modify existing file', @expected );
-}
+received_events(
+    sub { create_test_files(qw(one/1)) },
+    'modify existing file',
+    qw(modified modified?)
+);
 
 # ls: one/1 one/2 one/sub/1 one/sub/2 two/1 two/sub -two/sub/2
 received_events( sub { delete_test_files(qw(two/sub/2)) },
@@ -66,19 +63,15 @@ SKIP: {
 
     # ls: one/1 one/2 one/ignoreme one/5 one/sub/1 one/sub/2 ~two/1 ~two/sub
     # Inotify2 generates an extra modified event when attributes changed
-    my @expected =
-      $n->does('AnyEvent::Filesys::Notify::Role::Inotify2')
-      ? qw(modified modified modified)
-      : qw(modified modified);
-    received_events( sub { modify_attrs_on_test_files(qw(two/1 two/sub)) },
-        'modify attributes', @expected );
+    received_events(
+        sub { modify_attrs_on_test_files(qw(two/1 two/sub)) },
+        'modify attributes', qw(modified modified modified?) );
+    }
 
-}
+    # ls: one/1 one/2 one/ignoreme +one/onlyme +one/4 one/5 one/sub/1 one/sub/2 two/1 two/sub
+    $n->filter(qr/onlyme/);
+    received_events( sub { create_test_files(qw(one/onlyme one/4)) },
+        'filter test', qw(created) );
 
-# ls: one/1 one/2 one/ignoreme +one/onlyme +one/4 one/5 one/sub/1 one/sub/2 two/1 two/sub
-$n->filter(qr/onlyme/);
-received_events( sub { create_test_files(qw(one/onlyme one/4)) },
-    'filter test', qw(created) );
-
-ok( 1, '... arrived' );
+    ok( 1, '... arrived' );
 

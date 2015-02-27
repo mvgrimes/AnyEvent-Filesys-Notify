@@ -82,23 +82,41 @@ sub received_events {
 
     $sub->();
 
-    my $w =
-      AnyEvent->timer( after => 5, cb => sub {
-              ok( 0, '... the next test listed timed out' );
-              $cv->send;
-          } );
+    my $w = AnyEvent->timer(
+        after => 3,
+        cb    => sub { $cv->send } );
 
     $cv->recv;
 
     my @received_type = map { $_->type } @received;
-    if ( not is_deeply( \@received_type, \@expected, $desc ) ) {
+    compare_ok( \@received_type, \@expected, $desc ) or do {
         diag sprintf "... expected: %s\n... received: %s\n",
           join( ',', @expected ), join( ',', @received_type );
         diag join "\n", @msgs;
-    }
+    };
 
     @received = ();
-    @msgs = ();
+    @msgs     = ();
+}
+
+sub compare_ok {
+    my ($rec_ref, $exp_ref, $desc) = @_;
+    $desc ||= "compare arrays";
+    my @rec = @$rec_ref;
+    my @exp = @$exp_ref;
+
+    while( scalar @rec or scalar @exp ){
+        no warnings 'uninitialized';
+        my ($rec,$exp) = (shift @rec, shift @exp);
+        next if $rec eq $exp || "$rec?" eq $exp;
+        if( $exp =~ /\?$/ ){ # optional
+            unshift @rec, $rec if defined $rec;
+            next;
+        }
+        return ok(0, $desc);
+    }
+
+    return ok(1, $desc);
 }
 
 1;
