@@ -1,5 +1,11 @@
 Changes for AnyEvent::Filesys::Notify
 
+1.16 - Fri Feb 27 13:38:46 EST 2015
+    Rewrites the test functions to accommodate optional events
+    - Parsing events from Inotify2 (instead of re-scanning) results in
+      extraneous modifications in some situations. Tests shouldn't fail if
+      these optional events are triggered.
+
 1.15 - Fri Aug 15 20:14:38 EDT 2014
     Adds minimum version of perl to the prereqs
 

@@ -1,10 +1,11 @@
+[![Build Status](https://travis-ci.org/mvgrimes/AnyEvent-Filesys-Notify.svg?branch=master)]()
 # NAME
 
 AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/directories for changes
 
 # VERSION
 
-version 1.15
+version 1.16
 
 # SYNOPSIS
 
@@ -127,7 +128,7 @@ watcher to monitor the `$fsevent->watch` filehandle.
 Uses [IO::KQueue](https://metacpan.org/pod/IO::KQueue) to monitor directories. Sets up an `AnyEvent->io`
 watcher to monitor the `IO::KQueue` object.
 
-__WARNING__ - [IO::KQueue](https://metacpan.org/pod/IO::KQueue) and the `kqueue()` system call require an open
+**WARNING** - [IO::KQueue](https://metacpan.org/pod/IO::KQueue) and the `kqueue()` system call require an open
 filehandle for every directory and file that is being watched. This makes
 it impossible to watch large directory structures (and inefficient to watch
 moderately sized directories). The use of the KQueue backend is discouraged.
