@@ -4,7 +4,7 @@ package AnyEvent::Filesys::Notify::Event;
 
 use Moo;
 use MooX::late;
-use namespace::sweep;
+use namespace::autoclean;
 
 has path => ( is => 'ro', isa => 'Str', required => 1 );
 has type => ( is => 'ro', isa => 'Str', required => 1 );

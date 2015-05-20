@@ -5,7 +5,7 @@ package AnyEvent::Filesys::Notify;
 use Moo;
 use Moo::Role ();
 use MooX::late;
-use namespace::sweep;
+use namespace::autoclean;
 use AnyEvent;
 use Path::Iterator::Rule;
 use Cwd qw/abs_path/;

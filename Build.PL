@@ -18,7 +18,7 @@ my $build = Module::Build->new(
         'Cwd'                          => '3.40',
         'Carp'                         => '1.20',
         'Try::Tiny'                    => '0.18',
-        'namespace::sweep'             => '0.006',
+        'namespace::autoclean'         => '0.24',
         ( $^O eq 'linux'  ? ( 'Linux::Inotify2' => '1.22' ) : () ),
         ( $^O eq 'darwin' ? ( 'Mac::FSEvents'   => '0.10' ) : () ),
         ( $^O =~ /bsd/    ? ( 'IO::KQueue'      => '0.34' ) : () ),

@@ -4,7 +4,7 @@ package AnyEvent::Filesys::Notify::Role::Inotify2;
 
 use Moo::Role;
 use MooX::late;
-use namespace::sweep;
+use namespace::autoclean;
 use AnyEvent;
 use Linux::Inotify2;
 use Carp;
