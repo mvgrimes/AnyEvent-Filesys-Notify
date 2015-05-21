@@ -10,6 +10,8 @@ use Linux::Inotify2;
 use Carp;
 use Path::Iterator::Rule;
 
+our $VERSION = '1.18';
+
 # use Scalar::Util qw(weaken);  # Attempt to address RT#57104, but alas...
 
 sub _init {
@@ -130,7 +132,7 @@ AnyEvent::Filesys::Notify::Role::Inotify2 - Use Linux::Inotify2 to watch for cha
 
 =head1 VERSION
 
-version 1.17
+version 1.18
 
 =head1 AUTHOR
 

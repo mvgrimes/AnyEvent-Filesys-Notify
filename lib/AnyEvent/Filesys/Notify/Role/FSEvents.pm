@@ -9,6 +9,8 @@ use AnyEvent;
 use Mac::FSEvents;
 use Carp;
 
+our $VERSION = '1.18';
+
 sub _init {
     my $self = shift;
 
@@ -48,7 +50,7 @@ AnyEvent::Filesys::Notify::Role::FSEvents - Use Mac::FSEvents to watch for chang
 
 =head1 VERSION
 
-version 1.17
+version 1.18
 
 =head1 AUTHOR
 
