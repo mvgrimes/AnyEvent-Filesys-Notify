@@ -70,5 +70,5 @@ sub path_class_rule {
 }
 
 sub _stat {
-    &AnyEvent::Filesys::Notify::_stat;
+    &AnyEvent::Filesys::Notify->_stat;
 }

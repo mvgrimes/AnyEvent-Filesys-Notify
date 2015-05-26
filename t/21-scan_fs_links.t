@@ -19,17 +19,17 @@ symlink File::Spec->catfile( $dir, 'original' ),
 delete_test_files('original');
 
 # Scan it once, should be skipped on ext4
-my $old_fs = AnyEvent::Filesys::Notify::_scan_fs($dir);
+my $old_fs = AnyEvent::Filesys::Notify->_scan_fs($dir);
 is( keys %$old_fs, 1, '_scan_fs: got links' ) or diag ddx $old_fs;
 
 # Now see if we get warnings
-my $new_fs           = AnyEvent::Filesys::Notify::_scan_fs($dir);
+my $new_fs           = AnyEvent::Filesys::Notify->_scan_fs($dir);
 my @warnings_emitted = ();
 my @events           = do {
     local $SIG{__WARN__} = sub {
         push @warnings_emitted, shift;
     };
-    AnyEvent::Filesys::Notify::_diff_fs( $old_fs, $new_fs );
+    AnyEvent::Filesys::Notify->_diff_fs( $old_fs, $new_fs );
 };
 ok( !@warnings_emitted, '... without warnings' )
   or diag join "\n", @warnings_emitted;

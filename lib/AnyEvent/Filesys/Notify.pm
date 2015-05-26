@@ -30,7 +30,7 @@ has _watcher => ( is => 'rw', );
 sub BUILD {
     my $self = shift;
 
-    $self->_old_fs( _scan_fs( $self->dirs ) );
+    $self->_old_fs( $self->_scan_fs( $self->dirs ) );
 
     $self->_load_backend;
     return $self->_init;    # initialize the backend
@@ -49,8 +49,9 @@ sub _process_events {
     if ( $self->parse_events and $self->can('_parse_events') ) {
         @events = $self->_apply_filter( $self->_parse_events(@raw_events) );
     } else {
-        my $new_fs = _scan_fs( $self->dirs );
-        @events = $self->_apply_filter( _diff_fs( $self->_old_fs, $new_fs ) );
+        my $new_fs = $self->_scan_fs( $self->dirs );
+        @events =
+          $self->_apply_filter( $self->_diff_fs( $self->_old_fs, $new_fs ) );
         $self->_old_fs($new_fs);
     }
 
@@ -77,7 +78,7 @@ sub _apply_filter {
 # Keys are absolute path and values are path/mtime/size/is_dir
 # Takes either array or arrayref
 sub _scan_fs {
-    my (@args) = @_;
+    my ( $self, @args ) = @_;
 
     # Accept either an array of dirs or a array ref of dirs
     my @paths = ref $args[0] eq 'ARRAY' ? @{ $args[0] } : @args;
@@ -87,7 +88,7 @@ sub _scan_fs {
     my $rule = Path::Iterator::Rule->new;
     my $next = $rule->iter(@paths);
     while ( my $file = $next->() ) {
-        my $stat = _stat($file)
+        my $stat = $self->_stat($file)
           or next; # Skip files that we can't stat (ie, broken symlinks on ext4)
         $fs_stats->{ abs_path($file) } = $stat;
     }
@@ -96,7 +97,7 @@ sub _scan_fs {
 }
 
 sub _diff_fs {
-    my ( $old_fs, $new_fs ) = @_;
+    my ( $self, $old_fs, $new_fs ) = @_;
     my @events = ();
 
     for my $path ( keys %$old_fs ) {
@@ -107,7 +108,9 @@ sub _diff_fs {
                 type   => 'deleted',
                 is_dir => $old_fs->{$path}->{is_dir},
               );
-        } elsif ( _is_path_modified( $old_fs->{$path}, $new_fs->{$path} ) ) {
+        } elsif (
+            $self->_is_path_modified( $old_fs->{$path}, $new_fs->{$path} ) )
+        {
             push @events,
               AnyEvent::Filesys::Notify::Event->new(
                 path   => $path,
@@ -132,7 +135,7 @@ sub _diff_fs {
 }
 
 sub _is_path_modified {
-    my ( $old_path, $new_path ) = @_;
+    my ( $self, $old_path, $new_path ) = @_;
 
     return 1 if $new_path->{mode} != $old_path->{mode};
     return   if $new_path->{is_dir};
@@ -143,7 +146,7 @@ sub _is_path_modified {
 
 # Originally taken from Filesys::Notify::Simple --Thanks Miyagawa
 sub _stat {
-    my $path = shift;
+    my ( $self, $path ) = @_;
 
     my @stat = stat $path;
 
