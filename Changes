@@ -1,5 +1,12 @@
 Changes for AnyEvent::Filesys::Notify
 
+1.19 - Tue May 26 15:20:03 EDT 2015
+    - Converts utility functions to methods to support subclassing (RT#104714).
+      The use of local functions (rather than methods) makes subclassing
+      more difficult. This change converts all utility functions in Notify.pm
+      to methods. Thanks to Dave Hayes for submitting RT#104714.
+    - Any users attempting to subclass should consider upgrading.
+
 1.18 - Wed May 20 20:27:58 EDT 2015
     - Adds version to some files which were missing it
     - No change in functionality. No need to upgrade.

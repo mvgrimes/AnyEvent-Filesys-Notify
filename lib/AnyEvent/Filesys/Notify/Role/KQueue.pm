@@ -9,7 +9,7 @@ use AnyEvent;
 use IO::KQueue;
 use Carp;
 
-our $VERSION = '1.18';
+our $VERSION = '1.19';
 
 # Arbitrary limit on open filehandles before issuing a warning
 our $WARN_FILEHANDLE_LIMIT = 50;
@@ -114,7 +114,7 @@ AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed fi
 
 =head1 VERSION
 
-version 1.18
+version 1.19
 
 =head1 CONTRIBUTORS
 
