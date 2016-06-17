@@ -21,3 +21,6 @@ tmp/
 ^nytprof.out
 ^\.local-v.*
 ^local/
+^\.DS_Store
+^\.perl-version
+^\.travis.yml

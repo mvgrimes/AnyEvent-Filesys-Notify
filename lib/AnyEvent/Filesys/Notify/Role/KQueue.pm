@@ -9,7 +9,7 @@ use AnyEvent;
 use IO::KQueue;
 use Carp;
 
-our $VERSION = '1.19';
+our $VERSION = '1.20';
 
 # Arbitrary limit on open filehandles before issuing a warning
 our $WARN_FILEHANDLE_LIMIT = 50;
@@ -59,7 +59,7 @@ sub _add_created {
     }
 
     $self->_check_filehandle_count;
-};
+}
 
 sub _watch {
     my ( $self, $path ) = @_;
@@ -112,15 +112,31 @@ AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed fi
 
 =head1 VERSION
 
-version 1.19
+version 1.20
+
+=head1 CONTRIBUTORS
+
+=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+
+=over 4
+
+=item *
+
+Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue
+
+=item *
+
+Dave Hayes E<lt>dave@jetcafe.orgE<gt>
+
+=item *
+
+Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+
+=back
 
 =head1 AUTHOR
 
 Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
-
-=head1 CONTRIBUTOR
-
-Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue
 
 =head1 SOURCE
 

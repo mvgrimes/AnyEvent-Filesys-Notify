@@ -13,7 +13,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '1.19';
+our $VERSION = '1.20';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs         => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -241,7 +241,9 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 =head1 VERSION
 
-version 1.19
+version 1.20
+
+=head1 STATUS
 
 =for html <img src="https://travis-ci.org/mvgrimes/AnyEvent-Filesys-Notify.svg?branch=master" alt="Build Status">
 <a href="https://metacpan.org/pod/AnyEvent::Filesys::Notify"><img alt="CPAN version" src="https://badge.fury.io/pl/AnyEvent-Filesys-Notify.svg" /></a>
@@ -417,27 +419,45 @@ L<Linux::INotify2>, L<Moose>.
 
 Alternatives to this module L<Filesys::Notify::Simple>, L<File::ChangeNotify>.
 
-=head1 BUGS
-
-Please report any bugs or suggestions at L<http://rt.cpan.org/>
-
-Forcing the C<IO::KQueue> backend on a Mac does not seem to work.  The
-C<IO::KQueue> backend seems to be working fine on BSD. I don't have the
-experience or time to fix it on a Mac.  I would greatly appreciate any help
-troubleshooting this.
-
 =head1 CONTRIBUTORS
 
-Thanks to Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD
-support for IO::KQueue.
+=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+
+=over 4
+
+=item *
+
+Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue
+
+=item *
+
+Dave Hayes E<lt>dave@jetcafe.orgE<gt>
+
+=item *
+
+Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+
+=back
 
 =head1 AUTHOR
 
 Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
+=head1 SOURCE
+
+Source repository is at L<https://github.com/mvgrimes/AnyEvent-Filesys-Notify>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website L<http://github.com/mvgrimes/AnyEvent-Filesys-Notify/issues>
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2016 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

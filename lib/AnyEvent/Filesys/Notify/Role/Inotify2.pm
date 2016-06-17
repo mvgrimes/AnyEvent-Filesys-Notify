@@ -10,7 +10,7 @@ use Linux::Inotify2;
 use Carp;
 use Path::Iterator::Rule;
 
-our $VERSION = '1.19';
+our $VERSION = '1.20';
 
 # use Scalar::Util qw(weaken);  # Attempt to address RT#57104, but alas...
 
@@ -114,7 +114,7 @@ sub _add_created {
             sub { my $e = shift; $self->_process_events($e); } );
 
     }
-};
+}
 
 1;
 
@@ -128,15 +128,31 @@ AnyEvent::Filesys::Notify::Role::Inotify2 - Use Linux::Inotify2 to watch for cha
 
 =head1 VERSION
 
-version 1.19
+version 1.20
+
+=head1 CONTRIBUTORS
+
+=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+
+=over 4
+
+=item *
+
+Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue
+
+=item *
+
+Dave Hayes E<lt>dave@jetcafe.orgE<gt>
+
+=item *
+
+Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+
+=back
 
 =head1 AUTHOR
 
 Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
-
-=head1 CONTRIBUTOR
-
-Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue
 
 =head1 SOURCE
 

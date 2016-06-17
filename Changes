@@ -1,5 +1,16 @@
 Changes for AnyEvent::Filesys::Notify
 
+1.20 - Fri Jun 17 13:59:05 EDT 2016
+    Runs bug test against KQueue if possible; improves comments
+    - Ensures files are added to watch before calling in callback (RT#115380)
+      Files that were modified in the callback were sometimes not added to the
+      watch list first (specifically in KQueue and Inotify2). This patch
+      ensures that files/directories are added to the watch before the callback
+      is called. Thanks to Dave Hayes <dave@jetcafe.org> for the bug report.
+    - If you modified _process_events (a private method) this could break your
+      code.
+    - Upgrade is recommended if you use the KQueue or Inotify2 backends.
+
 1.19 - Tue May 26 15:20:03 EDT 2015
     - Converts utility functions to methods to support subclassing (RT#104714).
       The use of local functions (rather than methods) makes subclassing

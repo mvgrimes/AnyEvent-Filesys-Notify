@@ -4,7 +4,9 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 # VERSION
 
-version 1.19
+version 1.20
+
+# STATUS
 
 <div>
     <img src="https://travis-ci.org/mvgrimes/AnyEvent-Filesys-Notify.svg?branch=master" alt="Build Status">
@@ -178,27 +180,31 @@ Modules used to implement this module [AnyEvent](https://metacpan.org/pod/AnyEve
 
 Alternatives to this module [Filesys::Notify::Simple](https://metacpan.org/pod/Filesys::Notify::Simple), [File::ChangeNotify](https://metacpan.org/pod/File::ChangeNotify).
 
-# BUGS
-
-Please report any bugs or suggestions at [http://rt.cpan.org/](http://rt.cpan.org/)
-
-Forcing the `IO::KQueue` backend on a Mac does not seem to work.  The
-`IO::KQueue` backend seems to be working fine on BSD. I don't have the
-experience or time to fix it on a Mac.  I would greatly appreciate any help
-troubleshooting this.
-
 # CONTRIBUTORS
 
-Thanks to Gasol Wu <gasol.wu@gmail.com> who contributed the BSD
-support for IO::KQueue.
+- Gasol Wu <gasol.wu@gmail.com> who contributed the BSD support for IO::KQueue
+- Dave Hayes <dave@jetcafe.org>
+- Carsten Wolff <carsten@wolffcarsten.de>
 
 # AUTHOR
 
 Mark Grimes, <mgrimes@cpan.org>
 
+# SOURCE
+
+Source repository is at [https://github.com/mvgrimes/AnyEvent-Filesys-Notify](https://github.com/mvgrimes/AnyEvent-Filesys-Notify).
+
+# BUGS
+
+Please report any bugs or feature requests on the bugtracker website [http://github.com/mvgrimes/AnyEvent-Filesys-Notify/issues](http://github.com/mvgrimes/AnyEvent-Filesys-Notify/issues)
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 # COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Mark Grimes, <mgrimes@cpan.org>.
+This software is copyright (c) 2016 by Mark Grimes, <mgrimes@cpan.org>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
