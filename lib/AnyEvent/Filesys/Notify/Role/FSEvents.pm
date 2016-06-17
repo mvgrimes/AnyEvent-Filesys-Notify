@@ -56,9 +56,25 @@ version 1.19
 
 Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
+=head1 CONTRIBUTOR
+
+Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue
+
+=head1 SOURCE
+
+Source repository is at L<https://github.com/mvgrimes/AnyEvent-Filesys-Notify>.
+
+=head1 BUGS
+
+Please report any bugs or feature requests on the bugtracker website L<http://github.com/mvgrimes/AnyEvent-Filesys-Notify/issues>
+
+When submitting a bug or request, please include a test-file or a
+patch to an existing test-file that illustrates the bug or desired
+feature.
+
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2015 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2016 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

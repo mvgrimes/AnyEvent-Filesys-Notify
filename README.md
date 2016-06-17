@@ -8,6 +8,7 @@ version 1.19
 
 <div>
     <img src="https://travis-ci.org/mvgrimes/AnyEvent-Filesys-Notify.svg?branch=master" alt="Build Status">
+    <a href="https://metacpan.org/pod/AnyEvent::Filesys::Notify"><img alt="CPAN version" src="https://badge.fury.io/pl/AnyEvent-Filesys-Notify.svg" /></a>
 </div>
 
 # SYNOPSIS

@@ -240,6 +240,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 version 1.19
 
 =for html <img src="https://travis-ci.org/mvgrimes/AnyEvent-Filesys-Notify.svg?branch=master" alt="Build Status">
+<a href="https://metacpan.org/pod/AnyEvent::Filesys::Notify"><img alt="CPAN version" src="https://badge.fury.io/pl/AnyEvent-Filesys-Notify.svg" /></a>
 
 =head1 SYNOPSIS
 

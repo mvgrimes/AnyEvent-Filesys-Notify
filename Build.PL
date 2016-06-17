@@ -2,6 +2,7 @@ use Module::Build;
 my $build = Module::Build->new(
     module_name   => 'AnyEvent::Filesys::Notify',
     license       => 'perl',
+    dist_author   => 'Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>',
     create_readme => 1,
 
     configure_requires => {
@@ -41,9 +42,12 @@ my $build = Module::Build->new(
     meta_merge => {
         resources => {
             bugtracker =>
-              'http://rt.cpan.org/NoAuth/Bugs.html?Dist=AnyEvent-Filesys-Notify',
+              'http://github.com/mvgrimes/AnyEvent-Filesys-Notify/issues',
             repository => 'http://github.com/mvgrimes/AnyEvent-Filesys-Notify'
-        }
+        },
+        x_contributors => [
+            'Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue',
+        ],
     },
 );
 
