@@ -29,7 +29,8 @@ sub _init {
     # Add each file and each directory
     my @fhs;
     for my $path (@paths) {
-        push @fhs, $self->_watch($path);
+        my $fh = $self->_watch($path);
+        push @fhs, $fh if defined $fh;
     }
 
     # Now use AE to watch the KQueue
@@ -47,21 +48,17 @@ sub _init {
 
 # Need to add newly created items (directories and files).
 # This is done after filtering. So entire dirs can be ignored efficiently.
-around '_process_events' => sub {
-    my ( $orig, $self, @e ) = @_;
+sub _add_created {
+    my ( $self, @events ) = @_;
 
-    my $events = $self->$orig(@e);
-
-    for my $event (@$events) {
+    for my $event (@events) {
         next unless $event->is_created;
 
         my $fh = $self->_watch( $event->path );
-        push @{ $self->_watcher->{fhs} }, $fh;
-
+        push @{ $self->_watcher->{fhs} }, $fh if defined $fh;
     }
 
     $self->_check_filehandle_count;
-    return $events;
 };
 
 sub _watch {
@@ -72,6 +69,7 @@ sub _watch {
           "KQueue requires a filehandle for each watched file and directory.\n"
           . "You have exceeded the number of filehandles permitted by the OS.\n"
           if $! =~ /^Too many open files/;
+        return if $! =~ /no such file or directory/i;
         croak "Can't open file ($path): $!";
     };
 

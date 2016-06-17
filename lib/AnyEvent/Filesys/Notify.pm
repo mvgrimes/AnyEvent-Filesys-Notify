@@ -55,6 +55,8 @@ sub _process_events {
         $self->_old_fs($new_fs);
     }
 
+    $self->_add_created(@events) if $self->can('_add_created');
+
     $self->cb->(@events) if @events;
 
     return \@events;

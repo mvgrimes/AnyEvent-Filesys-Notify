@@ -101,12 +101,10 @@ sub _parse_events {
 
 # Need to add newly created sub-dirs to the watch list.
 # This is done after filtering. So entire dirs can be ignored efficiently;
-around '_process_events' => sub {
-    my ( $orig, $self, @e ) = @_;
+sub _add_created {
+    my ( $self, @events ) = @_;
 
-    my $events = $self->$orig(@e);
-
-    for my $event (@$events) {
+    for my $event (@events) {
         next unless $event->is_dir && $event->is_created;
 
         $self->_fs_monitor->watch(
@@ -116,8 +114,6 @@ around '_process_events' => sub {
             sub { my $e = shift; $self->_process_events($e); } );
 
     }
-
-    return $events;
 };
 
 1;
