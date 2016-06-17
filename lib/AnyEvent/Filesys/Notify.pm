@@ -55,6 +55,8 @@ sub _process_events {
         $self->_old_fs($new_fs);
     }
 
+    # Some backends need to add files (KQueue) or directories (Inotify2) to the
+    # watch list after they are created. Give them a chance to do that here.
     $self->_add_created(@events) if $self->can('_add_created');
 
     $self->cb->(@events) if @events;

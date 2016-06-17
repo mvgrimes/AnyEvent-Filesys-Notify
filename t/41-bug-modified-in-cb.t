@@ -1,4 +1,4 @@
-use Test::More tests => 3;
+use Test::More tests => 6;
 
 use strict;
 use warnings;
@@ -11,21 +11,34 @@ use TestSupport qw(create_test_files delete_test_files move_test_files
 
 use AnyEvent::Filesys::Notify;
 
-my $n = AnyEvent::Filesys::Notify->new(
-    dirs => [$dir],
-    cb   => sub {
-        receive_event(@_);
+sub run_test {
+    my %extra_config = @_;
 
-        # This call back deletes any created files
-        my $e = $_[0];
-        unlink $e->path if $e->type eq 'created';
-    },
-);
-isa_ok( $n, 'AnyEvent::Filesys::Notify' );
+    my $n = AnyEvent::Filesys::Notify->new(
+        dirs => [$dir],
+        cb   => sub {
+            receive_event(@_);
 
-# Create a file, which will be delete in the callback
-received_events( sub { create_test_files('foo') },
-    'create a file', qw(created) );
+            # This call back deletes any created files
+            my $e = $_[0];
+            unlink $e->path if $e->type eq 'created';
+        },
+        %extra_config,
+    );
+    isa_ok( $n, 'AnyEvent::Filesys::Notify' );
 
-# Did we get notified of the delete?
-received_events( sub { }, 'deleted the file', qw(deleted) );
+    # Create a file, which will be delete in the callback
+    received_events( sub { create_test_files('foo') },
+        'create a file', qw(created) );
+
+    # Did we get notified of the delete?
+    received_events( sub { }, 'deleted the file', qw(deleted) );
+}
+
+run_test();
+
+SKIP: {
+    skip 'Requires Mac with IO::KQueue', 3
+      unless $^O eq 'darwin' and eval { require IO::KQueue; 1; };
+    run_test( backend => 'KQueue' );
+}
