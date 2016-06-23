@@ -26,11 +26,11 @@ sub _init {
     my $old_fs = $self->_old_fs;
     my @paths  = keys %$old_fs;
 
-    # Add each file and each directory
-    my @fhs;
+    # Add each file and each directory to a hash of path => fh
+    my $fhs = {};
     for my $path (@paths) {
         my $fh = $self->_watch($path);
-        push @fhs, $fh if defined $fh;
+        $fhs->{$path} = $fh if defined $fh;
     }
 
     # Now use AE to watch the KQueue
@@ -40,22 +40,25 @@ sub _init {
             $self->_process_events(@events);
         }
     };
-    $self->_watcher( { fhs => \@fhs, w => $w } );
+    $self->_watcher( { fhs => $fhs, w => $w } );
 
     $self->_check_filehandle_count;
     return 1;
 }
 
-# Need to add newly created items (directories and files).
+# Need to add newly created items (directories and files) or remove deleted items.
+# This isn't going to be perfect. If the path is not canonical then we won't deleted it.
 # This is done after filtering. So entire dirs can be ignored efficiently.
-sub _add_created {
+sub _process_events_for_backend {
     my ( $self, @events ) = @_;
 
     for my $event (@events) {
-        next unless $event->is_created;
-
-        my $fh = $self->_watch( $event->path );
-        push @{ $self->_watcher->{fhs} }, $fh if defined $fh;
+        if ( $event->is_created ) {
+            my $fh = $self->_watch( $event->path );
+            $self->_watcher->{fhs}->{ $event->path } = $fh if defined $fh;
+        } elsif ( $event->is_deleted ) {
+            delete $self->_watcher->{fhs}->{ $event->path };
+        }
     }
 
     $self->_check_filehandle_count;
@@ -97,7 +100,7 @@ sub _check_filehandle_count {
 sub _watcher_count {
     my ($self) = @_;
     my $fhs = $self->_watcher->{fhs};
-    return scalar @$fhs;
+    return scalar keys %$fhs;
 }
 
 1;

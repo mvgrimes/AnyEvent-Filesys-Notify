@@ -101,7 +101,7 @@ sub _parse_events {
 
 # Need to add newly created sub-dirs to the watch list.
 # This is done after filtering. So entire dirs can be ignored efficiently;
-sub _add_created {
+sub _process_events_for_backend {
     my ( $self, @events ) = @_;
 
     for my $event (@events) {

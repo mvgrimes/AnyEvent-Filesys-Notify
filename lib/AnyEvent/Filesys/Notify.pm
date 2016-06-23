@@ -57,7 +57,8 @@ sub _process_events {
 
     # Some backends need to add files (KQueue) or directories (Inotify2) to the
     # watch list after they are created. Give them a chance to do that here.
-    $self->_add_created(@events) if $self->can('_add_created');
+    $self->_process_events_for_backend(@events)
+      if $self->can('_process_events_for_backend');
 
     $self->cb->(@events) if @events;
 
