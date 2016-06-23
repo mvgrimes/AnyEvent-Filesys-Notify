@@ -1,5 +1,11 @@
 Changes for AnyEvent::Filesys::Notify
 
+1.21 - Thu Jun 23 15:13:59 EDT 2016
+    Updates KQueue to remove file handles from watch list for deleted paths
+    - Addresses issue with leaking file handles. Thanks to dave@jetcafe.org.
+      (RT#115562).
+    - Upgrade is recommended if you use the KQueue backend.
+
 1.20 - Fri Jun 17 13:59:05 EDT 2016
     Runs bug test against KQueue if possible; improves comments
     - Ensures files are added to watch before calling in callback (RT#115380)

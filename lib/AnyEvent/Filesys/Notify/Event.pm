@@ -6,7 +6,7 @@ use Moo;
 use MooX::late;
 use namespace::autoclean;
 
-our $VERSION = '1.20';
+our $VERSION = '1.21';
 
 has path => ( is => 'ro', isa => 'Str', required => 1 );
 has type => ( is => 'ro', isa => 'Str', required => 1 );
@@ -34,7 +34,7 @@ AnyEvent::Filesys::Notify::Event - Object to report changes in the monitored fil
 
 =head1 VERSION
 
-version 1.20
+version 1.21
 
 =head1 SYNOPSIS
 

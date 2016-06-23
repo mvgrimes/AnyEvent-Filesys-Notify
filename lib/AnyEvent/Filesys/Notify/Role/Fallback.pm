@@ -8,7 +8,7 @@ use namespace::autoclean;
 use AnyEvent;
 use Carp;
 
-our $VERSION = '1.20';
+our $VERSION = '1.21';
 
 sub _init {
     my $self = shift;
@@ -36,7 +36,7 @@ AnyEvent::Filesys::Notify::Role::Fallback - Fallback method of file watching (ch
 
 =head1 VERSION
 
-version 1.20
+version 1.21
 
 =head1 CONTRIBUTORS
 

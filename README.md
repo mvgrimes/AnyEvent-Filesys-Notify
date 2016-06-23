@@ -4,7 +4,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 # VERSION
 
-version 1.20
+version 1.21
 
 # STATUS
 
