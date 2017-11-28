@@ -80,23 +80,50 @@ sub _parse_events {
         # New directories are not automatically watched, we will add it to the
         # list of watched directories in `around '_process_events'` but in
         # the meantime, we will miss any newly created files in the subdir
-        if ( $e->IN_ISDIR and $type eq 'created' ) {
+    }
+
+    return @events;
+}
+
+sub _parse_events_postprocess {
+    my ( $self, @events ) = @_;
+
+    my %additional;
+    foreach my $e (@events) {
+        if ( $e->is_dir and $e->type eq 'created' ) {
             my $rule = Path::Iterator::Rule->new;
-            my $next = $rule->iter( $e->fullname );
+            my $next = $rule->iter( $e->path );
             while ( my $file = $next->() ) {
-                next if $file eq $e->fullname;
-                push @events,
-                  AnyEvent::Filesys::Notify::Event->new(
-                    path   => $file,
-                    type   => 'created',
-                    is_dir => -d $file,
-                  );
+                next if $file eq $e->path;
+                my $is_dir = -d $file;
+                $additional{$file}{created} =
+                    AnyEvent::Filesys::Notify::Event->new(
+                        path   => $file,
+                        type   => 'created',
+                        is_dir => $is_dir,
+                    );
+
+                    # if you would regually write to this file you would also see the modify event!
+                    # on Inotify you always see the modified as well.
+                $additional{$file}{modified} =
+                    AnyEvent::Filesys::Notify::Event->new(
+                        path   => $file,
+                        type   => 'modified',
+                        is_dir => $is_dir,
+                    );
             }
 
         }
     }
+    # deduplicate
+    foreach my $e (@events) {
+        my $path = $e->path;
 
-    return @events;
+        if (exists $additional{$e->path}{$e->type}) {
+            $additional{$e->path}{$e->type} = undef;
+        }
+    }
+    return @events, grep { defined $_} map { ($_->{modified}, $_->{created}) } values %additional;
 }
 
 # Need to add newly created sub-dirs to the watch list.
