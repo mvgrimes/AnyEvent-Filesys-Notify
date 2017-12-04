@@ -23,6 +23,7 @@ has no_external  => ( is => 'ro', isa => 'Bool',          default  => 0 );
 has backend      => ( is => 'ro', isa => 'Str',           default  => '' );
 has filter       => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
 has parse_events => ( is => 'rw', isa => 'Bool',          default  => 0 );
+has skip_subdirs => ( is => 'ro', isa => 'Bool',          default  => 0 );
 has _fs_monitor  => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
@@ -91,6 +92,9 @@ sub _scan_fs {
     my $fs_stats = {};
 
     my $rule = Path::Iterator::Rule->new;
+    $rule->skip_subdirs(qr/./)
+        if (ref $self) =~ /^AnyEvent::Filesys::Notify/
+        && $self->skip_subdirs;
     my $next = $rule->iter(@paths);
     while ( my $file = $next->() ) {
         my $stat = $self->_stat($file)
@@ -356,6 +360,13 @@ generate an additional 'modified' event when a file changes (once when opened
 for write, and once when modified).
 
 =back
+
+=item skip_subdirs
+
+    skip_subdirs => 1,
+
+Skips subdirectories and anything in them while building a list of files/dirs
+to watch. Optional.
 
 =head1 WATCHER IMPLEMENTATIONS
 
