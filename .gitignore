@@ -1,5 +1,7 @@
 .*.swp
 .build
+Session.vim
+tags
 
 META.yml
 !META.json
