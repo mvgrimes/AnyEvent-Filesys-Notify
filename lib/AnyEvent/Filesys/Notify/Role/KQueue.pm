@@ -46,10 +46,11 @@ sub _init {
     return 1;
 }
 
-# Need to add newly created items (directories and files) or remove deleted items.
-# This isn't going to be perfect. If the path is not canonical then we won't deleted it.
-# This is done after filtering. So entire dirs can be ignored efficiently.
-sub _process_events_for_backend {
+# Need to add newly created items (directories and files) or remove deleted
+# items.  This isn't going to be perfect. If the path is not canonical then we
+# won't deleted it.  This is done after filtering. So entire dirs can be
+# ignored efficiently.
+sub _post_process_events {
     my ( $self, @events ) = @_;
 
     for my $event (@events) {

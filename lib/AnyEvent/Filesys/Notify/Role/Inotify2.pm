@@ -49,7 +49,8 @@ sub _init {
 }
 
 # Parse the events returned by Inotify2 instead of rescanning the files.
-# There are small changes in behavior compared to the parent code:
+# There are small changes in behavior compared to the previous releases
+# without parse_events:
 #
 # 1. `touch test` causes an additional "modified" event after the "created"
 # 2. `mv test2 test` if test exists before, event for test would be "modified"
@@ -58,50 +59,76 @@ sub _init {
 # Because of these differences, we default to the original behavior unless the
 # parse_events flag is true.
 sub _parse_events {
-    my ( $self, @raw_events ) = @_;
-    my @events = ();
+    my ( $self, $filter_cb, @raw_events ) = @_;
 
-    for my $e (@raw_events) {
-        my $type = undef;
+    my @events =
+      map  { $filter_cb->($_) }                    # filter new event
+      grep { defined }                             # filter undef events
+      map  { $self->_mk_event($_) } @raw_events;
 
-        $type = 'modified' if ( $e->mask & ( IN_MODIFY | IN_ATTRIB ) );
-        $type = 'deleted'  if ( $e->mask &
-            ( IN_DELETE | IN_DELETE_SELF | IN_MOVED_FROM | IN_MOVE_SELF ) );
-        $type = 'created'  if ( $e->mask & ( IN_CREATE | IN_MOVED_TO ) );
+    # New directories are not automatically watched by inotify.
+    $self->_add_events_to_watch(@events);
 
-        push(
-            @events,
-            AnyEvent::Filesys::Notify::Event->new(
-                path   => $e->fullname,
-                type   => $type,
-                is_dir => !! $e->IN_ISDIR,
-            ) ) if $type;
+    # Any entities that were created in new dirs (before the call to
+    # _add_events_to_watch) will have been missed. So we walk the filesystem
+    # now.
+    push @events,    # add to @events
+      map { $self->_add_entities_in_subdir( $filter_cb, $_ ) }  # ret new events
+      grep { $_->is_dir and $_->is_created }    # only new directories
+      @events;
 
-        # New directories are not automatically watched, we will add it to the
-        # list of watched directories in `around '_process_events'` but in
-        # the meantime, we will miss any newly created files in the subdir
-        if ( $e->IN_ISDIR and $type eq 'created' ) {
-            my $rule = Path::Iterator::Rule->new;
-            my $next = $rule->iter( $e->fullname );
-            while ( my $file = $next->() ) {
-                next if $file eq $e->fullname;
-                push @events,
-                  AnyEvent::Filesys::Notify::Event->new(
-                    path   => $file,
-                    type   => 'created',
-                    is_dir => -d $file,
-                  );
-            }
+    return @events;
+}
 
-        }
+sub _add_entities_in_subdir {
+    my ( $self, $filter_cb, $e ) = @_;
+    my @events;
+
+    my $rule = Path::Iterator::Rule->new;
+    my $next = $rule->iter( $e->path );
+    while ( my $file = $next->() ) {
+        next if $file eq $e->path; # $e->path will have already been added
+
+        my $new_event = AnyEvent::Filesys::Notify::Event->new(
+            path   => $file,
+            type   => 'created',
+            is_dir => -d $file,
+        );
+
+        next unless $filter_cb->($new_event);
+        $self->_add_events_to_watch( $new_event );
+        push @events, $new_event;
     }
 
     return @events;
 }
 
-# Need to add newly created sub-dirs to the watch list.
-# This is done after filtering. So entire dirs can be ignored efficiently;
-sub _process_events_for_backend {
+sub _mk_event {
+    my ( $self, $e ) = @_;
+
+    my $type = undef;
+
+    $type = 'modified' if ( $e->mask & ( IN_MODIFY | IN_ATTRIB ) );
+    $type = 'deleted'
+      if ( $e->mask &
+        ( IN_DELETE | IN_DELETE_SELF | IN_MOVED_FROM | IN_MOVE_SELF ) );
+    $type = 'created' if ( $e->mask & ( IN_CREATE | IN_MOVED_TO ) );
+
+    return unless $type;
+    return AnyEvent::Filesys::Notify::Event->new(
+        path   => $e->fullname,
+        type   => $type,
+        is_dir => !!$e->IN_ISDIR,
+    );
+}
+
+# Needed if `parse_events => 0`
+sub _post_process_events {
+    my ( $self, @events ) = @_;
+    return $self->_add_events_to_watch(@events);
+}
+
+sub _add_events_to_watch {
     my ( $self, @events ) = @_;
 
     for my $event (@events) {
@@ -110,9 +137,8 @@ sub _process_events_for_backend {
         $self->_fs_monitor->watch(
             $event->path,
             IN_MODIFY | IN_CREATE | IN_DELETE | IN_DELETE_SELF |
-                IN_MOVE | IN_MOVE_SELF | IN_ATTRIB,
+              IN_MOVE | IN_MOVE_SELF | IN_ATTRIB,
             sub { my $e = shift; $self->_process_events($e); } );
-
     }
 }
 

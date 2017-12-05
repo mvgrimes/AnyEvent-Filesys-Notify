@@ -42,24 +42,26 @@ sub _process_events {
 
     # Some implementations provided enough information to parse the raw events,
     # other require rescanning the file system (ie, Mac::FSEvents).
-    # The original behaviour was for rescan for all implementations, so we
+    # The original behavior was to rescan in all implementations, so we
     # have added a flag to avoid breaking old code.
 
     my @events;
 
     if ( $self->parse_events and $self->can('_parse_events') ) {
-        @events = $self->_apply_filter( $self->_parse_events(@raw_events) );
+        @events =
+          $self->_parse_events( sub { $self->_apply_filter(@_) }, @raw_events );
     } else {
         my $new_fs = $self->_scan_fs( $self->dirs );
         @events =
           $self->_apply_filter( $self->_diff_fs( $self->_old_fs, $new_fs ) );
         $self->_old_fs($new_fs);
-    }
 
-    # Some backends need to add files (KQueue) or directories (Inotify2) to the
-    # watch list after they are created. Give them a chance to do that here.
-    $self->_process_events_for_backend(@events)
-      if $self->can('_process_events_for_backend');
+        # Some backends (when not using parse_events) need to add files
+        # (KQueue) or directories (Inotify2) to the watch list after they are
+        # created. Give them a chance to do that here.
+        $self->_post_process_events(@events)
+          if $self->can('_post_process_events');
+    }
 
     $self->cb->(@events) if @events;
 
