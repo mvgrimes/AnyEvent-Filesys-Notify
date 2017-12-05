@@ -49,7 +49,7 @@ sub _process_events {
 
     if ( $self->parse_events and $self->can('_parse_events') ) {
         @events =
-            $self->_parse_events( sub { $self->_apply_filter(@_) }, @raw_events);
+          $self->_parse_events( sub { $self->_apply_filter(@_) }, @raw_events );
     } else {
         my $new_fs = $self->_scan_fs( $self->dirs );
         @events =
@@ -59,9 +59,9 @@ sub _process_events {
         # Some backends (when not using parse_events) need to add files
         # (KQueue) or directories (Inotify2) to the watch list after they are
         # created. Give them a chance to do that here.
-        $self->_post_process_events(@events) if $self->can('_post_process_events');
+        $self->_post_process_events(@events)
+          if $self->can('_post_process_events');
     }
-
 
     $self->cb->(@events) if @events;
 

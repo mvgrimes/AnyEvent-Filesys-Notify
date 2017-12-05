@@ -49,7 +49,8 @@ sub _init {
 }
 
 # Parse the events returned by Inotify2 instead of rescanning the files.
-# There are small changes in behavior compared to the parent code:
+# There are small changes in behavior compared to the previous releases
+# without parse_events:
 #
 # 1. `touch test` causes an additional "modified" event after the "created"
 # 2. `mv test2 test` if test exists before, event for test would be "modified"
@@ -68,10 +69,13 @@ sub _parse_events {
     # New directories are not automatically watched by inotify.
     $self->_add_events_to_watch(@events);
 
-    # Any entities that were created in new dirs, before the call to
-    # _add_events_to_watch, will be missed. So we walk the filesystem now.
-    push @events, map { $self->_add_entities_in_subdir( $filter_cb, $_ ) }
-      grep { $_->is_dir and $_->is_created } @events;
+    # Any entities that were created in new dirs (before the call to
+    # _add_events_to_watch) will have been missed. So we walk the filesystem
+    # now.
+    push @events,    # add to @events
+      map { $self->_add_entities_in_subdir( $filter_cb, $_ ) }  # ret new events
+      grep { $_->is_dir and $_->is_created }    # only new directories
+      @events;
 
     return @events;
 }
@@ -83,7 +87,7 @@ sub _add_entities_in_subdir {
     my $rule = Path::Iterator::Rule->new;
     my $next = $rule->iter( $e->path );
     while ( my $file = $next->() ) {
-        next if $file eq $e->path;
+        next if $file eq $e->path; # $e->path will have already been added
 
         my $new_event = AnyEvent::Filesys::Notify::Event->new(
             path   => $file,
@@ -117,6 +121,7 @@ sub _mk_event {
     );
 }
 
+# Needed if `parse_events => 0`
 sub _post_process_events {
     my ( $self, @events ) = @_;
     return $self->_add_events_to_watch(@events);
