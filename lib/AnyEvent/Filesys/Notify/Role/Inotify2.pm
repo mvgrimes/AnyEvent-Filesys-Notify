@@ -18,7 +18,7 @@ sub _init {
     my $self = shift;
 
     my $inotify = Linux::Inotify2->new()
-      or croak "Unable to create new Linux::Inotify2 object";
+      or croak "Unable to create new Linux::Inotify2 object: $!";
 
     # Need to add all the subdirs to the watch list, this will catch
     # modifications to files too.
