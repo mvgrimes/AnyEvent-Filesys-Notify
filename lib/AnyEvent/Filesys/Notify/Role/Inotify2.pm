@@ -96,6 +96,7 @@ sub _add_entities_in_subdir {
         );
 
         next unless $filter_cb->($new_event);
+        $self->_add_events_to_watch( $new_event );
         push @events, $new_event;
     }
 
@@ -133,7 +134,6 @@ sub _add_events_to_watch {
     for my $event (@events) {
         next unless $event->is_dir && $event->is_created;
 
-        print "adding to watch: " . $event->path . "\n";
         $self->_fs_monitor->watch(
             $event->path,
             IN_MODIFY | IN_CREATE | IN_DELETE | IN_DELETE_SELF |
