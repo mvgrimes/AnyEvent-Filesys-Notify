@@ -12,10 +12,7 @@ use TestSupport qw(create_test_files delete_test_files move_test_files
 use AnyEvent::Filesys::Notify;
 use AnyEvent::Impl::Perl;
 
-create_test_files(qw(one/1));
-create_test_files(qw(two/1));
-create_test_files(qw(one/sub/1));
-## ls: one/1 one/sub/1 two/1
+create_test_files(qw(one/1 two/1 one/sub/1));
 
 my $n = AnyEvent::Filesys::Notify->new(
     dirs   => [ map { File::Spec->catfile( $dir, $_ ) } qw(one two) ],

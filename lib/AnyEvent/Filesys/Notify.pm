@@ -13,7 +13,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs         => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -248,7 +248,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 =head1 VERSION
 
-version 1.21
+version 1.22
 
 =head1 STATUS
 
@@ -361,14 +361,14 @@ cause slight changes in behavior. In particular, the Inotify2 backend will
 generate an additional 'modified' event when a file changes (once when opened
 for write, and once when modified).
 
-=back
-
 =item skip_subdirs
 
     skip_subdirs => 1,
 
 Skips subdirectories and anything in them while building a list of files/dirs
 to watch. Optional.
+
+=back
 
 =head1 WATCHER IMPLEMENTATIONS
 
@@ -471,7 +471,7 @@ feature.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2017 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

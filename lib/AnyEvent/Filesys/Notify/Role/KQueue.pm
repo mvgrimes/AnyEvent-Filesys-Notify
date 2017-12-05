@@ -9,7 +9,7 @@ use AnyEvent;
 use IO::KQueue;
 use Carp;
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 
 # Arbitrary limit on open filehandles before issuing a warning
 our $WARN_FILEHANDLE_LIMIT = 50;
@@ -116,7 +116,7 @@ AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed fi
 
 =head1 VERSION
 
-version 1.21
+version 1.22
 
 =head1 CONTRIBUTORS
 
@@ -156,7 +156,7 @@ feature.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2017 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

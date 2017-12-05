@@ -6,7 +6,7 @@ use Moo;
 use MooX::late;
 use namespace::autoclean;
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 
 has path => ( is => 'ro', isa => 'Str', required => 1 );
 has type => ( is => 'ro', isa => 'Str', required => 1 );
@@ -34,7 +34,7 @@ AnyEvent::Filesys::Notify::Event - Object to report changes in the monitored fil
 
 =head1 VERSION
 
-version 1.21
+version 1.22
 
 =head1 SYNOPSIS
 
@@ -208,7 +208,7 @@ feature.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2017 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

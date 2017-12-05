@@ -10,7 +10,7 @@ use Linux::Inotify2;
 use Carp;
 use Path::Iterator::Rule;
 
-our $VERSION = '1.21';
+our $VERSION = '1.22';
 
 # use Scalar::Util qw(weaken);  # Attempt to address RT#57104, but alas...
 
@@ -154,7 +154,7 @@ AnyEvent::Filesys::Notify::Role::Inotify2 - Use Linux::Inotify2 to watch for cha
 
 =head1 VERSION
 
-version 1.21
+version 1.22
 
 =head1 CONTRIBUTORS
 
@@ -194,7 +194,7 @@ feature.
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2016 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
+This software is copyright (c) 2017 by Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
