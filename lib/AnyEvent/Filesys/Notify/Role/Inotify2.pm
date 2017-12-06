@@ -10,7 +10,7 @@ use Linux::Inotify2;
 use Carp;
 use Path::Iterator::Rule;
 
-our $VERSION = '1.22';
+our $VERSION = '1.23';
 
 # use Scalar::Util qw(weaken);  # Attempt to address RT#57104, but alas...
 
@@ -140,6 +140,8 @@ sub _add_events_to_watch {
               IN_MOVE | IN_MOVE_SELF | IN_ATTRIB,
             sub { my $e = shift; $self->_process_events($e); } );
     }
+
+    return;
 }
 
 1;
@@ -154,11 +156,13 @@ AnyEvent::Filesys::Notify::Role::Inotify2 - Use Linux::Inotify2 to watch for cha
 
 =head1 VERSION
 
-version 1.22
+version 1.23
+
+=head1 AUTHOR
+
+Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 CONTRIBUTORS
-
-=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
 =over 4
 
@@ -174,11 +178,15 @@ Dave Hayes E<lt>dave@jetcafe.orgE<gt>
 
 Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
+=item *
+
+Ettore Di Giacinto (@mudler)
+
+=item *
+
+Martin Barth (@ufobat)
+
 =back
-
-=head1 AUTHOR
-
-Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 SOURCE
 

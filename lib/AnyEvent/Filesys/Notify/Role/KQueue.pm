@@ -9,7 +9,7 @@ use AnyEvent;
 use IO::KQueue;
 use Carp;
 
-our $VERSION = '1.22';
+our $VERSION = '1.23';
 
 # Arbitrary limit on open filehandles before issuing a warning
 our $WARN_FILEHANDLE_LIMIT = 50;
@@ -63,6 +63,7 @@ sub _post_process_events {
     }
 
     $self->_check_filehandle_count;
+    return;
 }
 
 sub _watch {
@@ -96,6 +97,8 @@ sub _check_filehandle_count {
       . "You currently have $count filehandles for this AnyEvent::Filesys::Notify object.\n"
       . "The use of the KQueue backend is not recommended."
       if $count > $WARN_FILEHANDLE_LIMIT;
+
+    return $count;
 }
 
 sub _watcher_count {
@@ -116,11 +119,13 @@ AnyEvent::Filesys::Notify::Role::KQueue - Use IO::KQueue to watch for changed fi
 
 =head1 VERSION
 
-version 1.22
+version 1.23
+
+=head1 AUTHOR
+
+Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 CONTRIBUTORS
-
-=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
 =over 4
 
@@ -136,11 +141,15 @@ Dave Hayes E<lt>dave@jetcafe.orgE<gt>
 
 Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
+=item *
+
+Ettore Di Giacinto (@mudler)
+
+=item *
+
+Martin Barth (@ufobat)
+
 =back
-
-=head1 AUTHOR
-
-Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 SOURCE
 

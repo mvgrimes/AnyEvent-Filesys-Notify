@@ -13,7 +13,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '1.22';
+our $VERSION = '1.23';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs         => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -163,7 +163,7 @@ sub _stat {
 
     # Return undefined if no stats can be retrieved, as it happens with broken
     # symlinks (at least under ext4).
-    return undef unless @stat;
+    return unless @stat;
 
     return {
         path   => $path,
@@ -248,7 +248,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 =head1 VERSION
 
-version 1.22
+version 1.23
 
 =head1 STATUS
 
@@ -433,9 +433,11 @@ L<Linux::INotify2>, L<Moose>.
 
 Alternatives to this module L<Filesys::Notify::Simple>, L<File::ChangeNotify>.
 
-=head1 CONTRIBUTORS
+=head1 AUTHOR
 
-=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
+Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
+
+=head1 CONTRIBUTORS
 
 =over 4
 
@@ -451,11 +453,15 @@ Dave Hayes E<lt>dave@jetcafe.orgE<gt>
 
 Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
+=item *
+
+Ettore Di Giacinto (@mudler)
+
+=item *
+
+Martin Barth (@ufobat)
+
 =back
-
-=head1 AUTHOR
-
-Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 SOURCE
 

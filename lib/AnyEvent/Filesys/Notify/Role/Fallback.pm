@@ -8,7 +8,7 @@ use namespace::autoclean;
 use AnyEvent;
 use Carp;
 
-our $VERSION = '1.22';
+our $VERSION = '1.23';
 
 sub _init {
     my $self = shift;
@@ -36,11 +36,13 @@ AnyEvent::Filesys::Notify::Role::Fallback - Fallback method of file watching (ch
 
 =head1 VERSION
 
-version 1.22
+version 1.23
+
+=head1 AUTHOR
+
+Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 CONTRIBUTORS
-
-=for stopwords Gasol Wu E<lt>gasol.wu@gmail.comE<gt> who contributed the BSD support for IO::KQueue Dave Hayes E<lt>dave@jetcafe.orgE<gt> Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
 =over 4
 
@@ -56,11 +58,15 @@ Dave Hayes E<lt>dave@jetcafe.orgE<gt>
 
 Carsten Wolff E<lt>carsten@wolffcarsten.deE<gt>
 
+=item *
+
+Ettore Di Giacinto (@mudler)
+
+=item *
+
+Martin Barth (@ufobat)
+
 =back
-
-=head1 AUTHOR
-
-Mark Grimes, E<lt>mgrimes@cpan.orgE<gt>
 
 =head1 SOURCE
 

@@ -4,7 +4,7 @@ AnyEvent::Filesys::Notify - An AnyEvent compatible module to monitor files/direc
 
 # VERSION
 
-version 1.22
+version 1.23
 
 # STATUS
 
@@ -187,15 +187,17 @@ Modules used to implement this module [AnyEvent](https://metacpan.org/pod/AnyEve
 
 Alternatives to this module [Filesys::Notify::Simple](https://metacpan.org/pod/Filesys::Notify::Simple), [File::ChangeNotify](https://metacpan.org/pod/File::ChangeNotify).
 
+# AUTHOR
+
+Mark Grimes, <mgrimes@cpan.org>
+
 # CONTRIBUTORS
 
 - Gasol Wu <gasol.wu@gmail.com> who contributed the BSD support for IO::KQueue
 - Dave Hayes <dave@jetcafe.org>
 - Carsten Wolff <carsten@wolffcarsten.de>
-
-# AUTHOR
-
-Mark Grimes, <mgrimes@cpan.org>
+- Ettore Di Giacinto (@mudler)
+- Martin Barth (@ufobat)
 
 # SOURCE
 
