@@ -13,7 +13,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '1.23';
+our $VERSION = '1.23-dave';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs         => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -24,6 +24,7 @@ has backend      => ( is => 'ro', isa => 'Str',           default  => '' );
 has filter       => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
 has parse_events => ( is => 'rw', isa => 'Bool',          default  => 0 );
 has skip_subdirs => ( is => 'ro', isa => 'Bool',          default  => 0 );
+has max_depth    => ( is => 'ro', isa => 'Num',           default  => -1 );
 has _fs_monitor  => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
@@ -97,6 +98,9 @@ sub _scan_fs {
     $rule->skip_subdirs(qr/./)
         if (ref $self) =~ /^AnyEvent::Filesys::Notify/
         && $self->skip_subdirs;
+    $rule->max_depth($self->max_depth)
+        if (ref $self) =~ /^AnyEvent::Filesys::Notify/
+        && ($self->max_depth >= 0);
     my $next = $rule->iter(@paths);
     while ( my $file = $next->() ) {
         my $stat = $self->_stat($file)
@@ -367,6 +371,22 @@ for write, and once when modified).
 
 Skips subdirectories and anything in them while building a list of files/dirs
 to watch. Optional.
+
+=item max_depth
+
+    max_depth => 1,
+
+An apparent side effect of skip_subdirs is not being able to detect when
+a directory is created inside the watched directory. One solution is to
+instead specify the maximum depth while building a list of files/dirs to watch. 
+
+Thus, this parameter can be set to any integer greater than 0 which specifies the
+maximum depth in which you wish to scan for changes.
+
+For those using backends that use a filehandle per object watched, this is
+essential to keep filehandle count low and performance high. 
+
+Optional.
 
 =back
 
