@@ -18,6 +18,7 @@ use AnyEvent::Impl::Perl;
 
 create_test_files(qw(one/1 two/1 one/sub/1));
 
+# Why does this break on 5.14?
 my $n = AnyEvent::Filesys::Notify->new(
     dirs   => [ map { File::Spec->catfile( $dir, $_ ) } qw(one two) ],
     cb     => sub   { receive_event(@_) },
