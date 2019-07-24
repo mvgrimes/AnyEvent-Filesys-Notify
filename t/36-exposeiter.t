@@ -16,11 +16,11 @@ use TestSupport qw(create_test_files delete_test_files move_test_files
 use AnyEvent::Filesys::Notify;
 use AnyEvent::Impl::Perl;
 
-create_test_files(qw(one/1 two/1 one/sub/1));
+create_test_files(qw(oneone/1 twotwo/1 oneone/sub/1));
 
 # Why does this break on 5.14?
 my $n = AnyEvent::Filesys::Notify->new(
-    dirs   => [ map { File::Spec->catfile( $dir, $_ ) } qw(one two) ],
+    dirs   => [ map { File::Spec->catfile( $dir, $_ ) } qw(oneone twotwo) ],
     cb     => sub   { receive_event(@_) },
     modify_iter => sub { $_[0]->and(sub { $_ !~ /3/; }); },
 );
@@ -42,47 +42,47 @@ SKIP: {
 
 diag "This might take a few seconds to run...";
 
-# ls: one/1 +one/2 one/sub/1 two/1
-received_events( sub { create_test_files(qw(one/2)) },
+# ls: oneone/1 +oneone/2 oneone/sub/1 twotwo/1
+received_events( sub { create_test_files(qw(oneone/2)) },
     'create a file', qw(created) );
 
-# ls: one/1 ~one/2 one/sub/1 two/1
-received_events( sub { create_test_files(qw(one/2)) },
+# ls: oneone/1 ~oneone/2 oneone/sub/1 twotwo/1
+received_events( sub { create_test_files(qw(oneone/2)) },
     'modify a file', qw(modified) );
 
-# ls: one/1 -one/2 one/sub/1 two/1
-received_events( sub { delete_test_files(qw(one/2)) },
+# ls: oneone/1 -oneone/2 oneone/sub/1 twotwo/1
+received_events( sub { delete_test_files(qw(oneone/2)) },
     'delete a file', qw(deleted) );
 
-# ls: one/1 one/sub/1 +one/sub/2 two/1
-received_events( sub { create_test_files(qw(one/sub/2)) },
+# ls: oneone/1 oneone/sub/1 +oneone/sub/2 twotwo/1
+received_events( sub { create_test_files(qw(oneone/sub/2)) },
     'create a file in subdir', qw(created) );
 
-# ls: one/1 one/sub/1 ~one/sub/2 two/1
-received_events( sub { create_test_files(qw(one/sub/2)) },
+# ls: oneone/1 oneone/sub/1 ~oneone/sub/2 twotwo/1
+received_events( sub { create_test_files(qw(oneone/sub/2)) },
     'modify a file in subdir', qw(modified) );
 
-# ls: one/1 one/sub/1 -one/sub/2 two/1
-received_events( sub { delete_test_files(qw(one/sub/2)) },
+# ls: oneone/1 oneone/sub/1 -oneone/sub/2 twotwo/1
+received_events( sub { delete_test_files(qw(oneone/sub/2)) },
     'delete a file in subdir', qw(deleted) );
 
 # These shouldn't get any events
-received_events( sub { create_test_files(qw(one/3)) },
+received_events( sub { create_test_files(qw(oneone/3)) },
     'create a non-tracked file', qw() );
 
-received_events( sub { create_test_files(qw(one/sub/3)) },
+received_events( sub { create_test_files(qw(oneone/sub/3)) },
     'create a non-tracked file in subdir', qw() );
 
 
 SKIP: {
     skip "skip attr mods on Win32", 1 if $^O eq 'MSWin32';
 
-    # ls: one/1 one/sub/1 ~two/1
-    received_events( sub { modify_attrs_on_test_files(qw(two/1)) },
+    # ls: oneone/1 oneone/sub/1 ~twotwo/1
+    received_events( sub { modify_attrs_on_test_files(qw(twotwo/1)) },
         'modify attributes', qw(modified) );
 
-    # ls: one/1 ~one/sub/1 two/1
-    received_events( sub { modify_attrs_on_test_files(qw(one/sub/1)) },
+    # ls: oneone/1 ~oneone/sub/1 twotwo/1
+    received_events( sub { modify_attrs_on_test_files(qw(oneone/sub/1)) },
         'modify attributes in a subdir', qw(modified) );
 }
 
