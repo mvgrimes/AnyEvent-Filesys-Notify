@@ -13,7 +13,7 @@ use AnyEvent::Filesys::Notify::Event;
 use Carp;
 use Try::Tiny;
 
-our $VERSION = '1.23';
+our $VERSION = '1.23-dave2';
 my $AEFN = 'AnyEvent::Filesys::Notify';
 
 has dirs         => ( is => 'ro', isa => 'ArrayRef[Str]', required => 1 );
@@ -24,6 +24,7 @@ has backend      => ( is => 'ro', isa => 'Str',           default  => '' );
 has filter       => ( is => 'rw', isa => 'RegexpRef|CodeRef' );
 has parse_events => ( is => 'rw', isa => 'Bool',          default  => 0 );
 has skip_subdirs => ( is => 'ro', isa => 'Bool',          default  => 0 );
+has modify_iter  => ( is => 'rw', isa => 'CodeRef',       default  => sub { sub { ; } } ); # lol
 has _fs_monitor  => ( is => 'rw', );
 has _old_fs => ( is => 'rw', isa => 'HashRef' );
 has _watcher => ( is => 'rw', );
@@ -97,6 +98,8 @@ sub _scan_fs {
     $rule->skip_subdirs(qr/./)
         if (ref $self) =~ /^AnyEvent::Filesys::Notify/
         && $self->skip_subdirs;
+    $self->modify_iter->($rule)
+        if (ref $self) =~ /^AnyEvent::Filesys::Notify/; 
     my $next = $rule->iter(@paths);
     while ( my $file = $next->() ) {
         my $stat = $self->_stat($file)
@@ -367,6 +370,21 @@ for write, and once when modified).
 
 Skips subdirectories and anything in them while building a list of files/dirs
 to watch. Optional.
+
+=item modify_iter
+
+    modify_iter => sub { $_[0]->and(sub { -f $_ }); },
+
+If you are familiar with Path::Iterator::Rule and wish to add custom rules to
+your watcher to exclude certain files, then you can make modify_iter a code
+reference.  The instance of Path::Iterator::Rule that is being used to
+determine what to monitor will be passed into this code reference as the first
+argument. Your code reference will be run just before files are selected to be
+watched. 
+
+Note that skip_subdirs will, if set, be added to your list of rules.
+
+Optional.
 
 =back
 
